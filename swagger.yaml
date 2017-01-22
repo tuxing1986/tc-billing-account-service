@@ -386,6 +386,9 @@ definitions:
       endDate:
         type: string
         description: billing account end date, Datetime (GMT)
+      amount:
+        type: float
+        description: the challenge budget for this billing account.
       createdAt:
         type: string
         description: Datetime (GMT) when task was created
@@ -435,7 +438,6 @@ definitions:
             type: boolean
           status:
             type: string
-            description: http status code
           content:
             $ref: "#/definitions/BillingAccount"
 
@@ -481,7 +483,6 @@ definitions:
             type: boolean
           status:
             type: string
-            description: http status code
           metadata:
             $ref: "#/definitions/ResponseMetadata"
           content:
@@ -506,7 +507,6 @@ definitions:
             type: boolean
           status:
             type: string
-            description: http status code
           metadata:
             $ref: "#/definitions/ResponseMetadata"
           content:
