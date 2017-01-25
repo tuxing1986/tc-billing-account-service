@@ -387,7 +387,8 @@ definitions:
         type: string
         description: billing account end date, Datetime (GMT)
       amount:
-        type: float
+        type: number
+        format: float
         description: the challenge budget for this billing account.
       createdAt:
         type: string
