@@ -1,0 +1,8 @@
+GET billingAccounts\/
+GET me\/billingAccounts\/
+POST billingAccounts\/
+GET billingAccounts\/.*\/
+PATCH billingAccounts\/.*\/
+GET billingAccounts\/.*\/users\/
+POST billingAccounts\/.*\/users\/
+DELETE billingAccounts\/.*\/users\/.*\/
