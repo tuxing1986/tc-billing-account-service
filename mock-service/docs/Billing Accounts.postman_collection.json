@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Billing Accounts",
-		"_postman_id": "2d34bd4c-ea0f-e47b-009a-d2bab143927a",
+		"_postman_id": "182cba41-dbeb-3835-e04e-a62d8a7c708d",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -236,7 +236,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -264,7 +267,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -286,7 +292,10 @@
 						"url": "{{URL}}/api/v1/billingaccounts/?status=active&customer=123&user=user1&startDate=2017-01-20T15:47:21.561Z&endDate=2017-02-25T15:47:21.561Z&sort=customer",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -532,7 +541,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"amount\": \"10000\"\n\t}\n}"
+							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"amount\": \"10000\",\n\t\t\"description\": \"lorem ipsum\",\n\t\t\"poNumber\": 1234,\n\t\t\"paymentTerms\": \"terms\",\n\t\t\"subscriptionNumber\": 123455678\n\t}\n}"
 						},
 						"description": ""
 					},
@@ -628,7 +637,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -656,7 +668,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -678,7 +693,10 @@
 						"url": "{{URL}}/api/v1/me/billingaccounts/?status=active&startDate=2017-01-20T15:47:21.561Z&endDate=2017-02-28T15:47:21.561Z",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -706,7 +724,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -734,7 +755,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -756,7 +780,10 @@
 						"url": "{{URL}}/api/v1/billingaccounts/5688f7fe63cd25166b1c6d1a/users",
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -951,6 +978,355 @@
 						"body": {
 							"mode": "raw",
 							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clients",
+			"description": "",
+			"item": [
+				{
+					"name": "Get all clients",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get all clients - Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"client1\",\n\t\"status\": \"status1\",\n\t\"startDate\": \"02-05-2017\",\n\t\"endDate\": \"02-05-2018\",\n\t\"codeName\": \"code_name\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create client - Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create client - Invalid body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"invalid\": \"data\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients/clientId",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Replace the clientId with a valid client id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get client - Not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients/any_client_id",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get client - Invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients/clientId",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{USER_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients/clientId",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"client2\",\n\t\"status\": \"status2\",\n\t\"startDate\": \"6-05-2017\",\n\t\"endDate\": \"06-05-2018\",\n\t\"codeName\": \"code_name2\"\n}"
+						},
+						"description": "Replace clientId with a valid client id"
+					},
+					"response": []
+				},
+				{
+					"name": "Update client - No token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients/clientId",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"client2\",\n\t\"status\": \"status2\",\n\t\"startDate\": \"6-05-2017\",\n\t\"endDate\": \"06-05-2018\",\n\t\"codeName\": \"code_name2\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update client - Invalid body",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 403\"] = responseCode.code === 403;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{URL}}/api/v1/clients/clientId",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{ADMIN_TOKEN}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"client2\",\n\t\"status\": \"status2\",\n\t\"startDate\": \"6-05-2017\",\n\t\"endDate\": \"06-05-2018\",\n\t\"any_other_value\": \"code_name2\"\n}"
 						},
 						"description": ""
 					},
