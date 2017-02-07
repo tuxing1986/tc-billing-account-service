@@ -91,10 +91,10 @@ logging:
       timeZone: UTC
 
     - type: file
-      currentLogFilename: /var/log/ap-member-cert.log
+      currentLogFilename: /var/log/tc-billing-account.log
       threshold: ALL
       archive: true
-      archivedLogFilenamePattern: /var/log/ap-member-cert-%d.log
+      archivedLogFilenamePattern: /var/log/tc-billing-account-%d.log
       archivedFileCount: 5
       timeZone: UTC
       logFormat:  "%-5level [%d{yyyy-dd-mm HH:mm:ss.SSS}] [%thread] %logger - %msg%n"
