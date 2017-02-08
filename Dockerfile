@@ -7,8 +7,6 @@ COPY ./service/target/billing-account-*.jar billing-account.jar
 # copy config - do we need to masssage yaml based on ENV?
 COPY ./service/target/classes/billing-account.yaml billing-account.yaml
 
-COPY ./service/target/dependency-jars/* /dependency-jars/
-
 VOLUME ["/var/log/"]
 
 EXPOSE 8080
