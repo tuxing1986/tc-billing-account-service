@@ -35,13 +35,13 @@ oninit
 
 The configuration is done via environment variables, these can be set in 'local/run.sh'.
 
-|Name	    | Description                     |
-|-----------|:-------------------------------:|
-|IP         | The IP of your docker container |
-|OLTP_PW    | The Informix password           |
-|OLTP_USER  | The Informix user               |
-|OLTP_URL   | The Informix URL                |
-|TC_JWT_KEY | The JWT key                     |
+|Name	           | Description                     |
+|------------------|:-------------------------------:|
+|IP                | The IP of your docker container |
+|OLTP_PW           | The Informix password           |
+|OLTP_USER         | The Informix user               |
+|TCS_CATALOG_URL   | The Informix URL                |
+|TC_JWT_KEY        | The JWT key                     |
 
 ## Start Microservice
 
@@ -64,7 +64,7 @@ You may use git bash under windows to run shell script.
 If the maven build process was successful the unit tests ran without error.
 
 To verify the 'me/billingAccounts' endpoint the database needs to be updated.
-Please execute the following statements after you connected to the Informix database with URL OLTP_URL (same as in configuration):
+Please execute the following statements after you connected to the Informix database with URL TCS_CATALOG_URL (same as in configuration):
 
 ```SQL
 INSERT INTO tc_direct_project (project_id, name, user_id, create_date) VALUES (1, 'test', 1, current);
