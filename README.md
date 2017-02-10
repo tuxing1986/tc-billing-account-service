@@ -35,11 +35,11 @@ oninit
 
 The configuration is done via environment variables, these can be set in 'local/run.sh'.
 
-|Name	           | Description                     |
+|Name	             | Description                     |
 |------------------|:-------------------------------:|
 |IP                | The IP of your docker container |
-|OLTP_PW           | The Informix password           |
-|OLTP_USER         | The Informix user               |
+|TCS_CATALOG_PW    | The Informix password           |
+|TCS_CATALOG_USER  | The Informix user               |
 |TCS_CATALOG_URL   | The Informix URL                |
 |TC_JWT_KEY        | The JWT key                     |
 
