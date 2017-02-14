@@ -35,13 +35,13 @@ oninit
 
 The configuration is done via environment variables, these can be set in 'local/run.sh'.
 
-|Name	           | Description                     |
-|------------------|:-------------------------------:|
-|IP                | The IP of your docker container |
-|TIME_OLTP_PW      | The Informix password           |
-|TIME_OLTP_USER    | The Informix user               |
-|TIME_OLTP_URL     | The Informix URL                |
-|TC_JWT_KEY        | The JWT key                     |
+|Name	             | Description                     |
+|--------------------|:-------------------------------:|
+|IP                  | The IP of your docker container |
+|TIME_OLTP_PW        | The Informix password           |
+|TIME_OLTP_USER      | The Informix user               |
+|TIME_OLTP_URL       | The Informix URL                |
+|TC_JWT_KEY          | The JWT key                     |
 
 ## Start Microservice
 
