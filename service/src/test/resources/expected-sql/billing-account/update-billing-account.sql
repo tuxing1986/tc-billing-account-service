@@ -1,4 +1,4 @@
-UPDATE tt_project SET
+UPDATE project SET
        client_id = :clientId,
        name = :name,
        project_status_id = :statusId,

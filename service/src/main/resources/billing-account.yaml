@@ -15,9 +15,9 @@ database:
   driverClass: com.informix.jdbc.IfxDriver
 
   # the username
-  user: "${TCS_CATALOG_USER}"
+  user: "${TIME_OLTP_USER}"
 
-  password: "${TCS_CATALOG_PW}"
+  password: "${TIME_OLTP_PW}"
 
   # the password
   # NOTE: password is set as a java system property: i.e., -Ddw.database.password=<password>
@@ -25,7 +25,7 @@ database:
   validationQuery: select 1 from systables
 
   # the JDBC URL
-  url: "${TCS_CATALOG_URL}"
+  url: "${TIME_OLTP_URL}"
 
   # the minimum number of connections to keep open
   minSize: 2

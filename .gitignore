@@ -17,3 +17,4 @@ ap-project.log
 project-service.iml
 
 src/main/resources/auth.properties
+/bin

@@ -1,0 +1,442 @@
+{
+	"variables": [],
+	"info": {
+		"name": "billing-accounts-and-clients",
+		"_postman_id": "9854d015-6791-8958-c09f-8f40ad3c9c3f",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Billing Accounts",
+			"description": "",
+			"item": [
+				{
+					"name": "Search Billing Accounts By Date",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts?limit=10&offset=0&sort=endDate&filter=endDate%3D2020-05-19T09%3A00Z",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Search Billing Accounts By User",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts?limit=10&offset=0&sort=endDate&filter=user%3Dheffan",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Billing Accounts [status = 1]",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts?sort=status&limit=30&filter=status%3D1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Billing Account",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/2",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"salesTax\": 1.5,\n\t\"name\": \"updated billing account\",\n\t\"poNumber\": \"Updated PO\",\n\t\"paymentTerms\": {\n\t  \"id\": 1,\n\t  \"description\": \"test\"\n\t},\n\t\"status\": \"Inactive\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 1234,\n\t\"companyId\":1,\n\t\"description\":\"The updated decription\",\n\t\"manualPrizeSetting\":1,\n\t\"subscriptionNumber\":20\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Inactive Billing Accounts [status =0]",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts?sort=status&limit=30&filter=status%3D0",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Billing Accounts By Id",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/2",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Billing Account",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"salesTax\": 1.5,\n\t\"name\": \"New billing account\",\n\t\"poNumber\": \"New POOO\",\n\t\"paymentTerms\": {\n\t  \"id\": 1,\n\t  \"description\": \"test\"\n\t},\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z\",\n\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\"description\": \"The billing account description\",\n\t\"companyId\":1,\n\t\"subscriptionNumber\":25,\n\t\"manualPrizeSetting\":1\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Billing Account Users",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/3/users",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add User [handle = 'Yoshi' ] to Billing Account",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/3/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": 124916\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Add User [handle = 'wyzmo' ] to Billing Account",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/3/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": 124856\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove User From Billing Account",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/3/users/124856",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Search My Billing Accounts By Status ( 1 = Active)",
+					"request": {
+						"url": "{{apiUrl}}/v3/me/billing-accounts?limit=10&offset=0&sort=endDate&filter=status%3D1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Search Billing Accounts No Access",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts?limit=10&offset=0&sort=endDate&filter=endDate%3D2016-05-19T09%3A00Z-04",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{no-admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Clients",
+			"description": "",
+			"item": [
+				{
+					"name": "Get All Clients",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Client",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"param\" : {\n\t\t\"name\":\"Test Client2\",\n\t\t\"status\":\"Active\",\n\t\t\"startDate\": \"2017-02-12T09:00Z\",\n\t\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\t\"codeName\": \"CodeName 1\"\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get client By Id",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"param\" : {\n\t\t\"name\":\"Update client #s2\",\n\t\t\"status\":\"Inactive\",\n\t\t\"startDate\": \"2017-02-14T09:00Z\",\n\t\t\"endDate\": \"2017-05-21T09:00Z\",\n\t\t\"codeName\": \"CodeName 4\"\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,2 @@
+insert into user_account(user_account_id, user_name, password, account_status_id, creation_date, creation_user, modification_date, modification_user)
+VALUES (:userAccountId, :name,'', 1, current, :userId, current, :userId)

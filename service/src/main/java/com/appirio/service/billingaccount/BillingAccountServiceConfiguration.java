@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2017 TopCoder Inc., All Rights Reserved.
+ */
 package com.appirio.service.billingaccount;
 
 import com.appirio.service.BaseAppConfiguration;
