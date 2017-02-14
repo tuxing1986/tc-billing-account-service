@@ -1,21 +1,38 @@
+/*
+ * Copyright (C) 2017 TopCoder Inc., All Rights Reserved.
+ */
 package com.appirio.service.billingaccount;
 
 import com.appirio.service.BaseApplication;
+import com.appirio.service.billingaccount.api.BillingAccount;
+import com.appirio.service.billingaccount.api.Client;
 import com.appirio.service.billingaccount.dao.BillingAccountDAO;
+import com.appirio.service.billingaccount.dao.ClientDAO;
 import com.appirio.service.billingaccount.manager.BillingAccountManager;
+import com.appirio.service.billingaccount.manager.ClientManager;
 import com.appirio.service.billingaccount.resources.BillingAccountResource;
+import com.appirio.service.billingaccount.resources.ClientResource;
 import com.appirio.service.supply.resources.SupplyDatasourceFactory;
 import com.appirio.supply.DAOFactory;
 import com.appirio.supply.dataaccess.db.IdGenerator;
+
 import io.dropwizard.setup.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Starting point of the microservice
+ * Starting point of the micro-service.
+ * 
+ * <p>
+ * Changes in v1.1 FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES
+ *  <li>
+ *   -- Updated registerResources() to register the ClientResource.
+ *  </li>
+ * </p>
  *
- * @author TCSCODER
+ * @author TCSCODER, TCSCODER
+ * @version 1.1
  */
 public class BillingAccountServiceApplication extends BaseApplication<BillingAccountServiceConfiguration> {
 
@@ -26,7 +43,6 @@ public class BillingAccountServiceApplication extends BaseApplication<BillingAcc
     public String getName() {
         return "billing-account-service";
     }
-
 
     /**
      * @see BaseApplication
@@ -62,9 +78,20 @@ public class BillingAccountServiceApplication extends BaseApplication<BillingAcc
      */
     @Override
     protected void registerResources(BillingAccountServiceConfiguration config, Environment env) throws Exception {
-        IdGenerator generator = IdGenerator.getInstance("project_id_seq");
-        BillingAccountManager billingAccountManager = new BillingAccountManager(DAOFactory.getInstance().createDAO(BillingAccountDAO.class), generator);
+        // initialize the Billing account manager.
+    	BillingAccountManager billingAccountManager = 
+        		new BillingAccountManager(DAOFactory.getInstance().createDAO(BillingAccountDAO.class),
+        				IdGenerator.getInstance(BillingAccount.class.getName()),
+        				IdGenerator.getInstance("user_account_seq"));
+
+    	// initialize the client manager
+        ClientManager clientManager = new ClientManager(DAOFactory.getInstance().createDAO(ClientDAO.class),
+        		IdGenerator.getInstance(Client.class.getName()));
+        
+
+        // register the resources.
         env.jersey().register(new BillingAccountResource(billingAccountManager));
+        env.jersey().register(new ClientResource(clientManager));
 
         logger.info("Services registered");
     }

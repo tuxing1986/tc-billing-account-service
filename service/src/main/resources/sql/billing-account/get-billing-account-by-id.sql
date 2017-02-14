@@ -1,10 +1,21 @@
-SELECT p.project_id as id, p.name as name, pt.payment_terms_id as paymentTerms_Id,
-       pt.description as paymentTerms_Description,
-       ps.name as status, p.sales_tax as salesTax, p.po_box_number as poNumber,
-       p.start_date as startDate, p.end_date as endDate, p.budget as amount,
-       p.creation_date as createdAt, p.creation_user as createdBy,
-       p.modification_date as updatedAt, p.modification_user as updatedBy
-FROM tt_project p, project_status_lu ps, time_oltp\:payment_terms pt
-WHERE ps.project_status_id = p.project_status_id
-      AND p.project_id = :billingAccountId
-      AND pt.payment_terms_id = p.payment_terms_id
+SELECT p.project_id AS id,
+       p.name AS name,
+       pt.payment_terms_id AS paymentTerms_id,
+       pt.description AS paymentTerms_description,
+       RTRIM(decode (p.active, 1, 'Active', 'Inactive')) AS status,
+       p.sales_tax AS salesTax,
+       p.po_box_number AS poNumber,
+       p.start_date AS startDate,
+       p.end_date AS endDate,
+       p.budget AS amount,
+       p.creation_date AS createdAt,
+       p.creation_user AS createdBy,
+       p.modification_date AS updatedAt,
+       p.modification_user AS updatedBy,
+       p.description AS description,
+       p.subscription_number AS subscriptionNumber,
+       p.company_id AS companyId,
+       p.is_manual_prize_setting AS manualPrizeSetting
+FROM project p
+LEFT OUTER JOIN  payment_terms pt ON pt.payment_terms_id = p.payment_terms_id 
+WHERE p.project_id = :billingAccountId
