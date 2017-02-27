@@ -70,7 +70,7 @@ function* search(query, cb) {
   BillingAccount
   .find(criteria)
   .sort(customSort)
-  .select('_id customerNumber name status startDate endDate amount description poNumber paymentTerms subscriptionNumber createdAt createdBy updatedAt updatedBy')
+  .select('_id customerNumber name status startDate endDate budgetAmount description poNumber paymentTerms subscriptionNumber createdAt createdBy updatedAt updatedBy')
   .skip(query.offset ? query.offset * (query.limit || 10) : 0)
   .limit(query.limit || 10)
   .exec((err, accounts) => {
@@ -127,7 +127,7 @@ function* advancedSearch(query, cb) {
   .find(criteria)
   .populate('BillingAccountUser')
   .sort(customSort)
-  .select('_id customerNumber name status startDate endDate amount description poNumber paymentTerms subscriptionNumber createdAt createdBy updatedAt updatedBy')
+  .select('_id customerNumber name status startDate endDate budgetAmount description poNumber paymentTerms subscriptionNumber createdAt createdBy updatedAt updatedBy')
   .skip(query.offset ? query.offset * (query.limit || 10) : 0)
   .limit(query.limit || 10)
   .exec((err, accounts) => {
@@ -215,7 +215,7 @@ updateOne.schema = {
     status: Joi.string(),
     startDate: Joi.string(),
     endDate: Joi.string(),
-    amount: Joi.number(),
+    budgetAmount: Joi.number(),
     description: Joi.string(),
     poNumber: Joi.number(),
     paymentTerms: Joi.string(),

@@ -30,7 +30,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -55,7 +55,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -80,7 +80,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -105,7 +105,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"salesTax\": 1.5,\n\t\"name\": \"updated billing account\",\n\t\"poNumber\": \"Updated PO\",\n\t\"paymentTerms\": {\n\t  \"id\": 1,\n\t  \"description\": \"test\"\n\t},\n\t\"status\": \"Inactive\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 1234,\n\t\"companyId\":1,\n\t\"description\":\"The updated decription\",\n\t\"manualPrizeSetting\":1,\n\t\"subscriptionNumber\":20\n}"
+							"raw": "{\n\t\"salesTax\": 1.5,\n\t\"name\": \"updated billing account\",\n\t\"poNumber\": \"Updated PO\",\n\t\"paymentTerms\": {\n\t  \"id\": 1,\n\t  \"description\": \"test\"\n\t},\n\t\"status\": \"Inactive\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 1234,\n\t\"companyId\":1,\n\t\"description\":\"The updated decription\",\n\t\"manualPrizeSetting\":1,\n\t\"subscriptionNumber\":20\n}"
 						},
 						"description": ""
 					},
@@ -130,7 +130,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -155,7 +155,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -205,7 +205,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -305,7 +305,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},
@@ -330,7 +330,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"amount\": 12345\n}"
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
 						},
 						"description": ""
 					},

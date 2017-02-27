@@ -8,7 +8,7 @@ SELECT SKIP 0 FIRST 10
       p.po_box_number AS poNumber,
       p.start_date AS startDate,
       p.end_date AS endDate,
-      p.budget AS amount,
+      p.budget AS budgetAmount,
       p.creation_date AS createdAt,
       p.creation_user AS createdBy,
       p.modification_date AS updatedAt,

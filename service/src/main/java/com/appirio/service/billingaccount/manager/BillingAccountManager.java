@@ -149,7 +149,7 @@ public class BillingAccountManager extends BaseManager {
         // validate the provided companyId
         validateCompanyId(billingAccount.getCompanyId());
 
-        billingAccountDAO.updateBillingAccount(billingAccount.getId(), billingAccount.getAmount(),
+        billingAccountDAO.updateBillingAccount(billingAccount.getId(), billingAccount.getBudgetAmount(),
                 billingAccount.getName(), billingAccount.getPaymentTerms().getId(), billingAccount.getStartDate(),
                 billingAccount.getEndDate(), activeFlag, user.getUserId().getId(), billingAccount.getSalesTax(),
                 billingAccount.getPoNumber(), billingAccount.getDescription(), billingAccount.getSubscriptionNumber(),

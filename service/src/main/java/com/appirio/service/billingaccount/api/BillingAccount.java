@@ -76,7 +76,7 @@ public class BillingAccount extends BaseModel {
 	 */
 	@Getter
 	@Setter
-	private Float amount;
+	private Float budgetAmount;
 
 	/**
 	 * The sales tax.
