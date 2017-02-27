@@ -4,7 +4,7 @@ UPDATE project SET
        project_status_id = :statusId,
        start_date = :startDate,
        end_date = :endDate,
-       budget = :amount,
+       budget = :budgetAmount,
        modification_user = :userName,
        modification_date = current
 WHERE

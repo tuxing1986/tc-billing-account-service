@@ -625,7 +625,7 @@ definitions:
       endDate:
         type: string
         description: billing account end date, Datetime (GMT)
-      amount:
+      budgetAmount:
         type: number
         format: float
         description: the challenge budget for this billing account.

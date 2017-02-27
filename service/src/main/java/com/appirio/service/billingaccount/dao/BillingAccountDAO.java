@@ -97,7 +97,7 @@ public interface BillingAccountDAO {
      * Update existing billing account
      *
      * @param billingAccountId the billing account id
-     * @param amount the budged of the account
+     * @param budgetAmount the budged of the account
      * @param name the name of the account
      * @param startDate the start date
      * @param endDate the end date
@@ -111,7 +111,7 @@ public interface BillingAccountDAO {
      * @param manualPrizeSetting The manual prize setting flag
      */
     @SqlUpdateFile("sql/billing-account/update-billing-account.sql")
-    void updateBillingAccount(@Bind("billingAccountId") Long billingAccountId, @Bind("amount") Float amount,
+    void updateBillingAccount(@Bind("billingAccountId") Long billingAccountId, @Bind("budgetAmount") Float budgetAmount,
                               @Bind("name") String name, @Bind("paymentTermId") Long paymentTermId,
                               @Bind("startDate") Date startDate, @Bind("endDate") Date endDate,
                               @Bind("active") Long active, @Bind("userId") String userId,

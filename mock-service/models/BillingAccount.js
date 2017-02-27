@@ -18,7 +18,7 @@ const billingAccountSchema = new Schema({
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   users: [{ type: Schema.Types.ObjectId, ref: 'BillingAccountUser' }],
-  amount: Number,
+  budgetAmount: Number,
   description: String,
   poNumber: Number,
   paymentTerms: String,
