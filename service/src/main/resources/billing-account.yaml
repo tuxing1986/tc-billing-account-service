@@ -15,9 +15,9 @@ database:
   driverClass: com.informix.jdbc.IfxDriver
 
   # the username
-  user: "${OLTP_USER}"
+  user: "${TIME_OLTP_USER}"
 
-  password: "${OLTP_PW}"
+  password: "${TIME_OLTP_PW}"
 
   # the password
   # NOTE: password is set as a java system property: i.e., -Ddw.database.password=<password>
@@ -25,7 +25,7 @@ database:
   validationQuery: select 1 from systables
 
   # the JDBC URL
-  url: "${OLTP_URL}"
+  url: "${TIME_OLTP_URL}"
 
   # the minimum number of connections to keep open
   minSize: 2
@@ -91,10 +91,10 @@ logging:
       timeZone: UTC
 
     - type: file
-      currentLogFilename: /var/log/ap-member-cert.log
+      currentLogFilename: /var/log/tc-billing-account.log
       threshold: ALL
       archive: true
-      archivedLogFilenamePattern: /var/log/ap-member-cert-%d.log
+      archivedLogFilenamePattern: /var/log/tc-billing-account-%d.log
       archivedFileCount: 5
       timeZone: UTC
       logFormat:  "%-5level [%d{yyyy-dd-mm HH:mm:ss.SSS}] [%thread] %logger - %msg%n"

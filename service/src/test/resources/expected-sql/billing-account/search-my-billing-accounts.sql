@@ -1,1 +1,26 @@
-SELECT  SKIP 0  FIRST 10  p.project_id as id, p.name as name, pt.payment_terms_id as paymentTerms_Id,  pt.description as paymentTerms_Description,  ps.name as status, p.sales_tax as salesTax, p.po_box_number as poNumber,  p.start_date as startDate, p.end_date as endDate, p.budget as amount,  p.creation_date as createdAt, p.creation_user as createdBy,  p.modification_date as updatedAt, p.modification_user as updatedBy  FROM tc_direct_project tdp, direct_project_account dpa, tt_project p, time_oltp\:payment_terms pt, user_permission_grant upg, project_status_lu ps  WHERE tdp.project_id = dpa.project_id  AND dpa.billing_account_id = p.project_id  AND pt.payment_terms_id = p.payment_terms_id  AND ps.project_status_id = p.project_status_id  AND tdp.project_id = upg.resource_id  AND upg.user_id = :loggedInUser  AND 1=1  ORDER BY  p.name asc
+SELECT SKIP 0 FIRST 10
+      p.project_id AS id,
+      p.name AS name,
+      pt.payment_terms_id AS paymentTerms_id,
+      pt.description AS paymentTerms_description,
+      RTRIM(decode (p.active, 1, 'Active', 'Inactive')) AS status,
+      p.sales_tax AS salesTax,
+      p.po_box_number AS poNumber,
+      p.start_date AS startDate,
+      p.end_date AS endDate,
+      p.budget AS budgetAmount,
+      p.creation_date AS createdAt,
+      p.creation_user AS createdBy,
+      p.modification_date AS updatedAt,
+      p.modification_user AS updatedBy,
+      p.description AS description,
+      p.subscription_number AS subscriptionNumber,
+      p.company_id AS companyId,
+      p.is_manual_prize_setting AS manualPrizeSetting
+FROM  project p 
+LEFT OUTER JOIN payment_terms pt ON pt.payment_terms_id = p.payment_terms_id
+JOIN project_manager pm ON pm.project_id = p.project_id
+JOIN user_account ua ON ua.user_account_id = pm.user_account_id
+JOIN common_oltp\:user co ON co.user_id = :loggedInUser AND co.handle = ua.user_name
+AND 1=1
+ORDER BY p.name asc

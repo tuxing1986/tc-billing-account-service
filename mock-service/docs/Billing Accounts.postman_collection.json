@@ -541,7 +541,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"amount\": \"10000\",\n\t\t\"description\": \"lorem ipsum\",\n\t\t\"poNumber\": 1234,\n\t\t\"paymentTerms\": \"terms\",\n\t\t\"subscriptionNumber\": 123455678\n\t}\n}"
+							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"budgetAmount\": \"10000\",\n\t\t\"description\": \"lorem ipsum\",\n\t\t\"poNumber\": 1234,\n\t\t\"paymentTerms\": \"terms\",\n\t\t\"subscriptionNumber\": 123455678\n\t}\n}"
 						},
 						"description": ""
 					},
@@ -577,7 +577,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"amount\": \"10000\"\n\t}\n}"
+							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"budgetAmount\": \"10000\"\n\t}\n}"
 						},
 						"description": ""
 					},
@@ -608,7 +608,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"amount\": \"10000\"\n\t}\n}"
+							"raw": "{\n\t\"param\": {\n\t\t\"customerNumber\": \"12345678\",\n\t\t\"name\": \"Updated billing account\",\n\t\t\"status\": \"inactive\",\n\t\t\"startDate\": \"2017-01-21T15:47:21.561Z\",\n\t\t\"endDate\": \"2017-01-27T15:47:21.561Z\",\n\t\t\"budgetAmount\": \"10000\"\n\t}\n}"
 						},
 						"description": ""
 					},

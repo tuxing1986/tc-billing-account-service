@@ -1,7 +1,12 @@
+/*
+ * Copyright (C) 2017 TopCoder Inc., All Rights Reserved.
+ */
 package com.appirio.service.billingaccount.api;
 
 import com.appirio.supply.dataaccess.api.BaseModel;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +14,21 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.Date;
 
 /**
  * Represents a billing account
  *
- * @author TCSCODER
+ * <p>
+ *  Changes in v 1.1 : FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES
+ *  -- Added new fields : description, subscriptionNumber, companyId, manualPrizeSetting
+ * </p>
+ * 
+ * @author TCSCODER, TCSCODER
+ * @version 1.1
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +45,7 @@ public class BillingAccount extends BaseModel {
 	 */
 	@Getter
 	@Setter
+	@NotBlank
 	private String name;
 
 	/**
@@ -61,7 +76,7 @@ public class BillingAccount extends BaseModel {
 	 */
 	@Getter
 	@Setter
-	private Float amount;
+	private Float budgetAmount;
 
 	/**
 	 * The sales tax.
@@ -85,4 +100,41 @@ public class BillingAccount extends BaseModel {
 	@Setter
 	@NotNull
 	private PaymentTermsDTO paymentTerms;
+	
+	/**
+	 * The description of the billing account
+	 * @since 1.1
+	 */
+	@Getter
+	@Setter
+	@NotBlank
+	private String description;
+	
+	/**
+	 * The billing account subscription number.
+	 * @since 1.1
+	 */
+	@Getter
+	@Setter
+	private String subscriptionNumber;
+	
+	/**
+	 * The id of the company to which the billing account is associated.
+	 * 
+	 * @since 1.1
+	 */
+	@Getter
+	@Setter
+	@NotNull
+	@Min(0)
+	private Long companyId;
+	
+	/**
+	 * The manual prize setting flag value. The default value is set to 0.
+	 * 
+	 * @since 1.1
+	 */
+	@Getter
+	@Setter
+	private Long manualPrizeSetting;
 }

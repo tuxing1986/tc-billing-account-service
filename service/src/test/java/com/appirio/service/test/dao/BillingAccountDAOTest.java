@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2017 TopCoder Inc., All Rights Reserved.
+ */
 package com.appirio.service.test.dao;
 
 import static org.junit.Assert.assertEquals;
@@ -27,9 +30,14 @@ import org.skife.jdbi.v2.Query;
 import com.appirio.supply.SupplyException;
 
 /**
- * Test BillingAccountDAO
- * @author TCSCODER
- *
+ * Test BillingAccountDAO.
+ * <p>
+ *  Changes in v 1.1 "FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES"
+ *   -- Updated to take into consideration the newly added fields to BliingAccount.
+ * </p>
+ * 
+ * @author TCSCODER, TCSCODER.
+ * @version 1.1
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Query.class)
@@ -46,8 +54,10 @@ public class BillingAccountDAOTest extends GenericDAOTest {
     public void before() throws SupplyException {
         List<BillingAccount> billingAccounts = new ArrayList<>();
 
-        billingAccounts.add(new BillingAccount(1l, "1", "Active", new Date(), new Date(), 500.0f, 1.0f, "po1", new PaymentTermsDTO(1l, "30 Days")));
-        billingAccounts.add(new BillingAccount(2l, "2", "Active", new Date(), new Date(), 500.0f, 1.0f, "po2", new PaymentTermsDTO(1l, "30 Days")));
+   billingAccounts.add(new BillingAccount(1l, "1", "Active", new Date(), new Date(), 500.0f, 1.0f, "po1",
+   		new PaymentTermsDTO(1l, "30 Days"), "description1", "subscription#1", 1l, 0l ));
+   billingAccounts.add(new BillingAccount(2l, "2", "Active", new Date(), new Date(), 500.0f, 1.0f, "po2",
+   		new PaymentTermsDTO(1l, "30 Days"), "description2", "subscription#2", 1l, 0l));
 
         List<Map<String, Object>> unmappedData = new ArrayList<Map<String, Object>>();
         unmappedData.add(new HashMap<>());
@@ -91,7 +101,7 @@ public class BillingAccountDAOTest extends GenericDAOTest {
     @Test
     public void testCreateBillingAccount() throws IOException {
         // Invoke method
-        dao.createBillingAccount(1l, "testNew", 1l,new Date(), new Date(), 1l, "test", 1.0f, "po1");
+        dao.createBillingAccount(1l, "testNew", 1l,new Date(), new Date(), 1l, "test", 1.0f, "po1","desc1","subscr1", 1l, 0l);
 
         // Verify that JDBI was called
         verifySingleUpdate(mocker);
@@ -154,28 +164,5 @@ public class BillingAccountDAOTest extends GenericDAOTest {
 
         // Verify that the generated SQL file is as expected
         verifyGeneratedSQL(mocker, "expected-sql/users/remove-user-from-billing-account.sql", 0);
-    }
-
-    @Test
-    public void testGetStatusIdByName() throws SupplyException, IOException {
-        List<Map<String, Object>> unmappedData = new ArrayList<Map<String, Object>>();
-        unmappedData.add(new HashMap<String, Object>());
-        unmappedData.get(0).put("ct", new BigDecimal(1));
-
-        List<IdDTO> data = new ArrayList<>();
-        data.add(new IdDTO(1l));
-        dao = createDAO(data, unmappedData, BillingAccountDAO.class);
-
-        // Invoke method
-        IdDTO result = dao.getStatusIdByName("test");
-
-        // Verify result
-        assertNotNull(result);
-
-        // Verify that JDBI was called
-        verifySingleObjectQuery(mocker);
-
-        // Verify that the generated SQL file is as expected
-        verifyGeneratedSQL(mocker, "expected-sql/billing-account/get-status-id-by-name.sql", 0);
     }
 }

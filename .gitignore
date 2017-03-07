@@ -1,0 +1,20 @@
+target
+dependency-reduced-pom.xml
+lib
+.settings
+.classpath
+.project
+ap-project.log
+*.iml
+*.ipr
+*.iws
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+.idea
+project-service.iml
+
+src/main/resources/auth.properties
+/bin

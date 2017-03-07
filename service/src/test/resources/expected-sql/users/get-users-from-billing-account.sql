@@ -1,4 +1,6 @@
-select u.user_account_id as id, u.user_name as name
-FROM tt_project_manager pm, tt_user_account u
-WHERE pm.user_account_id = u.user_account_id
-AND pm.project_id = :billingAccountId
+SELECT 
+     u.user_account_id AS id,
+     u.user_name AS name
+FROM user_account u
+INNER JOIN project_manager pm ON pm.user_account_id = u.user_account_id 
+WHERE pm.project_id = :billingAccountId

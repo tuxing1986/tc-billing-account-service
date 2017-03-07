@@ -5,7 +5,7 @@
 - Java 8 with Maven 3
 - Docker
 
-# Docker Image
+# Docker Informix Image
 
 To run Informix locally go to the 'local' folder and execute the following command:
 
@@ -35,13 +35,13 @@ oninit
 
 The configuration is done via environment variables, these can be set in 'local/run.sh'.
 
-|Name	    | Description                     |
-|-----------|:-------------------------------:|
-|IP         | The IP of your docker container |
-|OLTP_PW    | The Informix password           |
-|OLTP_USER  | The Informix user               |
-|OLTP_URL   | The Informix URL                |
-|TC_JWT_KEY | The JWT key                     |
+|Name	             | Description                     |
+|--------------------|:-------------------------------:|
+|IP                  | The IP of your docker container |
+|TIME_OLTP_PW        | The Informix password           |
+|TIME_OLTP_USER      | The Informix user               |
+|TIME_OLTP_URL       | The Informix URL                |
+|TC_JWT_KEY          | The JWT key                     |
 
 ## Start Microservice
 
@@ -59,24 +59,47 @@ Then start the service using the following command in the 'local' folder:
 
 You may use git bash under windows to run shell script.
 
+## Data setup 
+Connect to informix server with informix/1nf0rm1x credentials and execute the SQL file doc/test_data.sql.
+If you are executing these SQL statements one by one, then make sure that the correct database is selected.
+
+
 ## Verification
 
 If the maven build process was successful the unit tests ran without error.
 
-To verify the 'me/billingAccounts' endpoint the database needs to be updated.
-Please execute the following statements after you connected to the Informix database with URL OLTP_URL (same as in configuration):
+-- Postman collection  : doc/billing-accounts-and-clients.postman_collection.json
+-- Postman environment : doc/billing-accounts_clients-env.postman_environment.json
+       
+The postman environment defines the following variables :
+  - apiUrl : The base API URL
+  - no-admin-token : A token for user with no admin access.
+  - admin-token : A token for an admin user ( 'heffan')
 
-```SQL
-INSERT INTO tc_direct_project (project_id, name, user_id, create_date) VALUES (1, 'test', 1, current);
-INSERT INTO direct_project_account VALUES (1,1,1);
-INSERT INTO user_permission_grant VALUES (1, 1, 1, 1, 0);
 
-INSERT INTO time_oltp:payment_terms VALUES (1, '30 Days', current, 'System', current, 'System', 1, 30);
-INSERT INTO time_oltp:payment_terms VALUES (2, '45 Days', current, 'System', current, 'System', 1, 45);
-INSERT INTO time_oltp:payment_terms VALUES (3, '60 Days', current, 'System', current, 'System', 1, 60);
-INSERT INTO time_oltp:payment_terms VALUES (4, '90 Days', current, 'System', current, 'System', 1, 90);
-INSERT INTO time_oltp:payment_terms VALUES (5, '120 Days', current, 'System', current, 'System', 1, 120);
-INSERT INTO time_oltp:payment_terms VALUES (6, 'Net Zero', current, 'System', current, 'System', 1, 0);
+Load the postman collection and environemnt in the 'doc' folder and execute the provided requests to verify the REST API.
+
+Please make sure to update the billing accounts ids and user ids and client ids in the REST path accordingly.
+
+
+There are two 'Add User to billing account' tests in the provided collection, this is to validate the following requirement :
+"6. When Adding Billing Account Users, If the tc handle doesn’t exist in the time_oltp:user_account table, then we’ll need to add it before we can create a project_manager record"
+
+-- The user 'Yoshi', already has a user account in time_oltp:user_account ( From initial informix data setup).
+-- The user 'wyzmo' does not have a user account.
+
+'Get Billing Account Users' can be used to check if the users are actually added to the billing account.
+
+
+--You can check if the user account is created by querying the user_account table in time_oltp :
+
+```
+select * from time_oltp:user_account
 ```
 
-Load the postman collection in the 'doc' folder and execute the provided requests to verify the REST API.
+The existing code mixed the userId (from common_oltp:user) with user account id (from time_oltp:user_account).
+The userId to specify for the Add/Remove user from billing account is the user id from common_oltp, these ids can be retrieved by executing the following statement :
+
+```
+select  user_id, handle from common_oltp:user
+```

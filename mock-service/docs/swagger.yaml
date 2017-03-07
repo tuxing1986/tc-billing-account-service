@@ -143,7 +143,7 @@ paths:
           description: No permission or wrong token
           schema:
             $ref: "#/definitions/ErrorModel"
-        '422':
+        '400':
           description: Invalid input
           schema:
             $ref: "#/definitions/ErrorModel"
@@ -194,7 +194,7 @@ paths:
           description: Returns the newly created billing account
           schema:
             $ref: "#/definitions/BillingAccountResponse"
-        '422':
+        '400':
           description: Invalid input
           schema:
             $ref: "#/definitions/ErrorModel"
@@ -243,7 +243,7 @@ paths:
           description: Successfully updated billing account. Returns original and updated billing account object
           schema:
             $ref: "#/definitions/UpdateBillingAccountResponse"
-        '422':
+        '400':
           description: Invalid input
           schema:
             $ref: "#/definitions/ErrorModel"
@@ -351,7 +351,7 @@ paths:
           description: No permission or wrong token
           schema:
             $ref: "#/definitions/ErrorModel"
-        '422':
+        '400':
           description: Invalid input
           schema:
             $ref: "#/definitions/ErrorModel"
@@ -415,7 +415,6 @@ parameters:
     required: false
     type: integer
     format: int32
-
 
 definitions:
   ResponseMetadata:
@@ -599,7 +598,7 @@ definitions:
       endDate:
         type: string
         description: billing account end date, Datetime (GMT)
-      amount:
+      budgetAmount:
         type: number
         format: float
         description: the challenge budget for this billing account.
