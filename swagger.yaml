@@ -508,6 +508,9 @@ definitions:
       salesTax:
         type: number
         description: The billing account sales tax.
+      billable:
+        type: boolean
+        description: The flag indicating whether this account is billable.
           
   PaymentTerms:
    type: object
@@ -643,6 +646,9 @@ definitions:
         type: number
         format: float
         description: the subscription number for this billing account.
+      billable:
+        type: boolean
+        description: the flag indicating the account is billable.
       createdAt:
         type: string
         description: Datetime (GMT) when task was created
@@ -661,6 +667,7 @@ definitions:
         format: int64
         description: READ-ONLY. User that last updated this task
         readOnly: true
+      
 
   BillingAccountUser:
     type: object

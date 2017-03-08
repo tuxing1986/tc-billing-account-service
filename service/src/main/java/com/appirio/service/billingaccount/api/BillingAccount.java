@@ -26,6 +26,10 @@ import java.util.Date;
  *  Changes in v 1.1 : FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES
  *  -- Added new fields : description, subscriptionNumber, companyId, manualPrizeSetting
  * </p>
+ * <p>
+ *  Changes in v 1.2 :
+ *  -- Added new field : billable
+ * </p>
  * 
  * @author TCSCODER, TCSCODER
  * @version 1.1
@@ -137,4 +141,12 @@ public class BillingAccount extends BaseModel {
 	@Getter
 	@Setter
 	private Long manualPrizeSetting;
+
+	/**
+	 * The flag indicating this account is billable.
+	 * @since 1.2
+	 */
+	@Getter
+	@Setter
+	private Boolean billable;
 }

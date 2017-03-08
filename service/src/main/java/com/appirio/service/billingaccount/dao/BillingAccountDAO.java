@@ -70,6 +70,7 @@ public interface BillingAccountDAO {
      * @param subscriptionNumber The billing account subscription number.
      * @param companyId The id of the company to which the billing account is associated.
      * @param manualPrizeSetting The manual prize setting flag
+     * @param billable the flag indicating the account is billable
      * 
      * @return the id of the created billing account
      */
@@ -82,7 +83,9 @@ public interface BillingAccountDAO {
                               @Bind("description") String description, 
                               @Bind("subscriptionNumber") String subscriptionNumber,
                               @Bind("companyId") Long companyId,
-                              @Bind("manualPrizeSetting") Long manualPrizeSetting);
+                              @Bind("manualPrizeSetting") Long manualPrizeSetting,
+                              @Bind("billable") boolean billable
+                              );
 
     /**
      * Get a billing account by id
@@ -109,6 +112,7 @@ public interface BillingAccountDAO {
      * @param subscriptionNumber The billing account subscription number.
      * @param companyId The company id.
      * @param manualPrizeSetting The manual prize setting flag
+     * @param billable the flag indicating the account is billable
      */
     @SqlUpdateFile("sql/billing-account/update-billing-account.sql")
     void updateBillingAccount(@Bind("billingAccountId") Long billingAccountId, @Bind("budgetAmount") Float budgetAmount,
@@ -119,7 +123,8 @@ public interface BillingAccountDAO {
                               @Bind("description") String description,
                               @Bind("subscriptionNumber") String subscriptionNumber,
                               @Bind("companyId") Long companyId,
-                              @Bind("manualPrizeSetting") Long manualPrizeSetting);
+                              @Bind("manualPrizeSetting") Long manualPrizeSetting,
+                              @Bind("billable") boolean billable);
 
     /**
      * Get users for given billing account

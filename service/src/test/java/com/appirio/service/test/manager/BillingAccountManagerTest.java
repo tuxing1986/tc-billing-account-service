@@ -67,7 +67,7 @@ public class BillingAccountManagerTest extends GenericDAOTest {
                 anyObject(),
                 anyObject(),
                 anyObject(),
-                anyObject())).thenReturn(1l);
+                anyObject(), false)).thenReturn(1l);
         
         when(generator.getNextId()).thenReturn(1l);
         when(billingAccountDAO.checkCompanyExists(anyObject())).thenReturn(new IdDTO());
@@ -91,7 +91,7 @@ public class BillingAccountManagerTest extends GenericDAOTest {
                 anyObject(),
                 anyObject(),
                 anyObject(),
-                anyObject());
+                anyObject(), false);
         verify(billingAccountDAO).getBillingAccount(anyObject());
     }
 
@@ -130,7 +130,7 @@ public class BillingAccountManagerTest extends GenericDAOTest {
                 anyObject(),
                 anyObject(),
                 anyObject(),
-                anyObject());
+                anyObject(), false);
         verify(billingAccountDAO).getBillingAccount(anyObject());
     }
 
@@ -172,9 +172,9 @@ public class BillingAccountManagerTest extends GenericDAOTest {
         List<BillingAccount> billingAccounts = new ArrayList<>();
 
         billingAccounts.add(new BillingAccount(1l, "1", "Active", new Date(), new Date(), 500.0f, 1.0f, "po1",
-        		new PaymentTermsDTO(1l, "30 Days"), "description1", "subscription#1", 1l, 0l ));
+        		new PaymentTermsDTO(1l, "30 Days"), "description1", "subscription#1", 1l, 0l, false ));
         billingAccounts.add(new BillingAccount(2l, "2", "Active", new Date(), new Date(), 500.0f, 1.0f, "po2",
-        		new PaymentTermsDTO(1l, "30 Days"), "description2", "subscription#2", 1l, 0l));
+        		new PaymentTermsDTO(1l, "30 Days"), "description2", "subscription#2", 1l, 0l, false));
         QueryResult<List<BillingAccount>> expected = new QueryResult<>();
         expected.setData(billingAccounts);
         return expected;

@@ -116,7 +116,7 @@ public class BillingAccountManager extends BaseManager {
                 billingAccount.getStartDate(), billingAccount.getEndDate(), activeFlag, user.getUserId().toString(),
                 billingAccount.getSalesTax(), billingAccount.getPoNumber(), billingAccount.getDescription(),
                 billingAccount.getSubscriptionNumber(), billingAccount.getCompanyId(),
-                billingAccount.getManualPrizeSetting());
+                billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
         return billingAccountDAO.getBillingAccount(id);
     }
 
@@ -153,7 +153,7 @@ public class BillingAccountManager extends BaseManager {
                 billingAccount.getName(), billingAccount.getPaymentTerms().getId(), billingAccount.getStartDate(),
                 billingAccount.getEndDate(), activeFlag, user.getUserId().getId(), billingAccount.getSalesTax(),
                 billingAccount.getPoNumber(), billingAccount.getDescription(), billingAccount.getSubscriptionNumber(),
-                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting());
+                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
         return billingAccountDAO.getBillingAccount(billingAccount.getId());
     }
 
