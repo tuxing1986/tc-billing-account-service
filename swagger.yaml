@@ -28,6 +28,25 @@ paths:
         - Bearer: []
       operationId: findAllClients
       description: Retreive all clients, Admin user only.
+      parameters:
+        - $ref: "#/parameters/offsetParam"
+        - $ref: "#/parameters/limitParam"
+        - name: filter
+          required: true
+          type: string
+          in: query
+          description: |
+            Url encoded list of Supported filters
+             - status
+             - name
+             - startDate
+             - endDate
+        - name: sort
+          required: false
+          description: |
+            sort clients by status, name, startDate, endDate
+          in: query
+          type: string
       responses:
         '403':
           description: No permission or wrong token
@@ -160,9 +179,8 @@ paths:
           in: query
           description: |
             Url encoded list of Supported filters
+             - name
              - status
-             - customer
-             - user
              - startDate
              - endDate
         - name: sort
@@ -282,6 +300,8 @@ paths:
             $ref: "#/definitions/BillingAccountUserListResponse"
       parameters:
         - $ref: "#/parameters/billingAcountIdParam"
+        - $ref: "#/parameters/offsetParam"
+        - $ref: "#/parameters/limitParam"
 
     post:
       tags:
@@ -368,13 +388,14 @@ paths:
           in: query
           description: |
             Url encoded list of Supported filters
+             - name
              - status
              - startDate
              - endDate
         - name: sort
           required: false
           description: |
-            sort billing accounts by status, startDate, endDate
+            sort billing accounts by name, status, startDate, endDate
           in: query
           type: string
 
@@ -469,19 +490,23 @@ definitions:
       codeName:
         type: string
         description: the client code name
+      customerNumber:
+        type: string
+        description: the client customer number
 
   NewBillingAccount:
     type: object
     required:
-       - customerNumber
        - name
+       - companyId
+       - clientId
     properties:
-      customerNumber:
-        type: string
-        description: customer number of billing account
       name:
         type: string
-        description: billing account name
+        description: billing account name      
+      description:
+        type: string
+        description: billing account description
       status:
         type: string
         description: BillingAccount status
@@ -500,6 +525,9 @@ definitions:
       manualPrizeSetting:
         type: number
         description: The manual prize setting
+      clientId:
+        type: number
+        description: The client id
       poNumber:
         type: string
         description: The po box number
@@ -508,6 +536,9 @@ definitions:
       salesTax:
         type: number
         description: The billing account sales tax.
+      budgetAmount:
+        type: number
+        description: The billing account budget amount.
           
   PaymentTerms:
    type: object
@@ -559,6 +590,9 @@ definitions:
       codeName:
         type: string
         description: The client code name
+      customerNumber:
+        type: string
+        description: The client customer number
 
   ClientResponse:
     title: Single client
@@ -609,10 +643,7 @@ definitions:
       id:
         description: unique identifier
         type: integer
-        format: int64
-      customerNumber:
-        type: string
-        description: customer number of billing account
+        format: int64      
       name:
         type: string
         description: billing account name
@@ -643,6 +674,15 @@ definitions:
         type: number
         format: float
         description: the subscription number for this billing account.
+      companyId:
+        type: number
+        description: The company id
+      manualPrizeSetting:
+        type: number
+        description: The manual prize setting
+      clientId:
+        type: number
+        description: The client id  
       createdAt:
         type: string
         description: Datetime (GMT) when task was created
