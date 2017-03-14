@@ -81,12 +81,12 @@ public class BillingAccountServiceApplication extends BaseApplication<BillingAcc
         // initialize the Billing account manager.
     	BillingAccountManager billingAccountManager = 
         		new BillingAccountManager(DAOFactory.getInstance().createDAO(BillingAccountDAO.class),
-        				IdGenerator.getInstance(BillingAccount.class.getName()),
-        				IdGenerator.getInstance("user_account_seq"));
+        				IdGenerator.getInstance("com.topcoder.timetracker.ProjectManager"),
+        				IdGenerator.getInstance("com.topcoder.timetracker.user.User"));
 
     	// initialize the client manager
         ClientManager clientManager = new ClientManager(DAOFactory.getInstance().createDAO(ClientDAO.class),
-        		IdGenerator.getInstance(Client.class.getName()));
+        		IdGenerator.getInstance("com.topcoder.timetracker.ClientManager"));
         
 
         // register the resources.

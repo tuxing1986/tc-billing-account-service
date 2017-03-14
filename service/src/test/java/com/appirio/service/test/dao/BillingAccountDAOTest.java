@@ -35,9 +35,14 @@ import com.appirio.supply.SupplyException;
  *  Changes in v 1.1 "FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES"
  *   -- Updated to take into consideration the newly added fields to BliingAccount.
  * </p>
- * 
+ *
+ *  <p>
+ *  Changes in v 1.2 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Updated to take into consideration the newly added clientId field.
+ * </p>
+ *
  * @author TCSCODER, TCSCODER.
- * @version 1.1
+ * @version 1.2
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Query.class)
@@ -55,9 +60,9 @@ public class BillingAccountDAOTest extends GenericDAOTest {
         List<BillingAccount> billingAccounts = new ArrayList<>();
 
    billingAccounts.add(new BillingAccount(1l, "1", "Active", new Date(), new Date(), 500.0f, 1.0f, "po1",
-   		new PaymentTermsDTO(1l, "30 Days"), "description1", "subscription#1", 1l, 0l ));
+   		new PaymentTermsDTO(1l, "30 Days"), "description1", "subscription#1", 1l, 0l, 1l ));
    billingAccounts.add(new BillingAccount(2l, "2", "Active", new Date(), new Date(), 500.0f, 1.0f, "po2",
-   		new PaymentTermsDTO(1l, "30 Days"), "description2", "subscription#2", 1l, 0l));
+   		new PaymentTermsDTO(1l, "30 Days"), "description2", "subscription#2", 1l, 0l, 1l));
 
         List<Map<String, Object>> unmappedData = new ArrayList<Map<String, Object>>();
         unmappedData.add(new HashMap<>());
@@ -101,7 +106,7 @@ public class BillingAccountDAOTest extends GenericDAOTest {
     @Test
     public void testCreateBillingAccount() throws IOException {
         // Invoke method
-        dao.createBillingAccount(1l, "testNew", 1l,new Date(), new Date(), 1l, "test", 1.0f, "po1","desc1","subscr1", 1l, 0l);
+        dao.createBillingAccount(1l, 500.0f, "testNew", 1l,new Date(), new Date(), 1l, "test", 1.0f, "po1","desc1","subscr1", 1l, 0l, 1l);
 
         // Verify that JDBI was called
         verifySingleUpdate(mocker);
@@ -129,7 +134,7 @@ public class BillingAccountDAOTest extends GenericDAOTest {
     @Test
     public void testGetBillingAccountUsers() throws IOException {
         // Invoke method
-        QueryResult<List<BillingAccountUser>> billingAccounts = dao.getBillingAccountUsers(1l);
+        QueryResult<List<BillingAccountUser>> billingAccounts = dao.getBillingAccountUsers(1l, createQueryParam(""));
 
         // Verify result
         assertNotNull(billingAccounts);

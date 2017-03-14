@@ -21,15 +21,22 @@ import java.util.List;
 
 /**
  * DAO to handle billing accounts.
- * 
+ *
  * <p>
  *  Changes in v 1.1 FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES
- *  -- Updated createBillingAccount()/updateBillingAccount() to accept additional fields. 
+ *  -- Updated createBillingAccount()/updateBillingAccount() to accept additional fields.
  *  -- Added checkCompanyExists(), getTCUserById() and createUserAccount(), checkUserBelongsToBillingAccount
  * </p>
  *
+ * <p>
+ *  Changes in v 1.2 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Updated createBillingAccount()/updateBillingAccount() to support budgetAmount and additional clientId field.
+ *  -- Added checkClientExists(), addBillingAccountToClient() and removeBillingAccountFromClient()
+ *  -- Updated getBillingAccountUsers() to support limit and offset
+ * </p>
+ *
  * @author TCSCODER, TCSCODER
- * @version 1.1
+ * @version 1.2
  */
 @DatasourceName("oltp")
 public interface BillingAccountDAO {
@@ -70,19 +77,21 @@ public interface BillingAccountDAO {
      * @param subscriptionNumber The billing account subscription number.
      * @param companyId The id of the company to which the billing account is associated.
      * @param manualPrizeSetting The manual prize setting flag
-     * 
+     * @param clientId the id of the client to which the billing account is associated.
+     *
      * @return the id of the created billing account
      */
     @SqlUpdateFile("sql/billing-account/create-billing-account.sql")
-    Long createBillingAccount(@Bind("projectId") Long projectId,
+    Long createBillingAccount(@Bind("projectId") Long projectId, @Bind("budgetAmount") Float budgetAmount,
                               @Bind("name") String name, @Bind("paymentTermId") Long paymentTermId,
                               @Bind("startDate") Date startDate, @Bind("endDate") Date endDate,
                               @Bind("active") Long active, @Bind("userId") String userId,
                               @Bind("salesTax") Float salesTax, @Bind("poNumber") String poNumber,
-                              @Bind("description") String description, 
+                              @Bind("description") String description,
                               @Bind("subscriptionNumber") String subscriptionNumber,
                               @Bind("companyId") Long companyId,
-                              @Bind("manualPrizeSetting") Long manualPrizeSetting);
+                              @Bind("manualPrizeSetting") Long manualPrizeSetting,
+                              @Bind("clientId") Long clientId);
 
     /**
      * Get a billing account by id
@@ -109,6 +118,7 @@ public interface BillingAccountDAO {
      * @param subscriptionNumber The billing account subscription number.
      * @param companyId The company id.
      * @param manualPrizeSetting The manual prize setting flag
+     * @param clientId the id of the client to which the billing account is associated.
      */
     @SqlUpdateFile("sql/billing-account/update-billing-account.sql")
     void updateBillingAccount(@Bind("billingAccountId") Long billingAccountId, @Bind("budgetAmount") Float budgetAmount,
@@ -119,16 +129,19 @@ public interface BillingAccountDAO {
                               @Bind("description") String description,
                               @Bind("subscriptionNumber") String subscriptionNumber,
                               @Bind("companyId") Long companyId,
-                              @Bind("manualPrizeSetting") Long manualPrizeSetting);
+                              @Bind("manualPrizeSetting") Long manualPrizeSetting,
+                              @Bind("clientId") Long clientId);
 
     /**
      * Get users for given billing account
      *
      * @param billingAccountId the billing account id
+     * @param queryParameter sort and filter parameters
      * @return return the users associated with the billing account
      */
     @SqlQueryFile("sql/users/get-users-from-billing-account.sql")
-    QueryResult<List<BillingAccountUser>> getBillingAccountUsers(@Bind("billingAccountId") Long billingAccountId);
+    QueryResult<List<BillingAccountUser>> getBillingAccountUsers(@Bind("billingAccountId") Long billingAccountId,
+        @ApiQueryInput QueryParameter queryParameter);
 
     /**
      * Add user to a billing account
@@ -159,48 +172,85 @@ public interface BillingAccountDAO {
      */
     @SqlQueryFile("sql/users/user-exists.sql")
     IdDTO checkUserExists(@Bind("handle") String handle);
-    
+
     /**
-	 * Checks whether the company identified by the specified company id exists in the database.
-	 * 
-	 * @param companyId The id of the company to check if it exists.
-	 * 
-	 * @return The IdDTO instance containing the id of the company. ( null of the company does not exist)
-	 * 
-	 * @since 1.1
-	 */
-	@SqlQueryFile("sql/billing-account/check-company-exists.sql")
-	IdDTO checkCompanyExists(@Bind("companyId") Long companyId);
-    
+     * Checks whether the company identified by the specified company id exists in the database.
+     *
+     * @param companyId The id of the company to check if it exists.
+     *
+     * @return The IdDTO instance containing the id of the company. ( null of the company does not exist)
+     *
+     * @since 1.1
+     */
+    @SqlQueryFile("sql/billing-account/check-company-exists.sql")
+    IdDTO checkCompanyExists(@Bind("companyId") Long companyId);
+
     /**
      * Gets the TCUserDTO from the persistence by id.
-     * 
+     *
      * @param userId The id of the user to retrieve.
      * @return The TC user matching the given id.
      */
     @SqlQueryFile("sql/users/get-tc-user-by-id.sql")
     TCUserDTO getTCUserById(@Bind("userId") Long userId);
-    
+
     /**
      * Creates a user account using the supplied parameters.
-     * 
-     * @param userAccountId The user account id. 
+     *
+     * @param userAccountId The user account id.
      * @param name The user name.
      * @param userId The id of user creating the account ( for auditing purpose)
      */
     @SqlUpdateFile("sql/users/create-user-account.sql")
     void createUserAccount(@Bind("userAccountId") Long userAccountId,
-    		               @Bind("name") String name,
-    		               @Bind("userId") String userId);
-    
+                           @Bind("name") String name,
+                           @Bind("userId") String userId);
+
     /**
      * Checks whether a user, identified by the user account id, belongs to a billing account.
-     * 
+     *
      * @param billingAccountId The billing account id.
      * @param userAccountId The user account id.
      * @return returns the IdDTO instance containing the id of the project id.
      */
     @SqlQueryFile("sql/users/check-user-belongs-to-billing-account.sql")
     IdDTO checkUserBelongsToBillingAccount(@Bind("billingAccountId") Long billingAccountId,
-    		                               @Bind("userAccountId") Long userAccountId);
+                                           @Bind("userAccountId") Long userAccountId);
+
+    /**
+     * Checks whether the client identified by the specified client id exists in the database.
+     *
+     * @param clientId The id of the client to check if it exists.
+     *
+     * @return The IdDTO instance containing the id of the client. ( null if the client does not exist)
+     *
+     * @since 1.2
+     */
+    @SqlQueryFile("sql/billing-account/check-client-exists.sql")
+    IdDTO checkClientExists(@Bind("clientId") Long clientId);
+
+    /**
+     * Creates a mapping between client and billing account.
+     *
+     * @param userId the user id (for audit purposes only)
+     * @param billingAccountId the billing account id
+     * @param clientId the id of the client to which the billing account is associated.
+     *
+     * @since 1.2
+     */
+    @SqlUpdateFile("sql/billing-account/add-billing-account-to-client.sql")
+    void addBillingAccountToClient(
+        @Bind("billingAccountId") Long billingAccountId,
+        @Bind("clientId") Long clientId,
+        @Bind("userId") String userId);
+
+    /**
+     * Removes a mapping between client and billing account.
+     *
+     * @param billingAccountId the billing account id
+     *
+     * @since 1.2
+     */
+    @SqlUpdateFile("sql/billing-account/remove-billing-account-from-client.sql")
+    void removeBillingAccountFromClient(@Bind("billingAccountId") Long billingAccountId);
 }
