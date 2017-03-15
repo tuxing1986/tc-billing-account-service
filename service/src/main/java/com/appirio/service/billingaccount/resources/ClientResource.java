@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import io.dropwizard.auth.Auth;
 import io.dropwizard.jersey.PATCH;
@@ -19,11 +20,14 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.appirio.service.billingaccount.api.Client;
 import com.appirio.service.billingaccount.dto.SaveClientDTO;
 import com.appirio.service.billingaccount.manager.ClientManager;
 import com.appirio.service.supply.resources.MetadataApiResponseFactory;
 import com.appirio.supply.ErrorHandler;
 import com.appirio.tech.core.api.v3.request.PostPutRequest;
+import com.appirio.tech.core.api.v3.request.QueryParameter;
+import com.appirio.tech.core.api.v3.request.annotation.APIQueryParam;
 import com.appirio.tech.core.api.v3.response.ApiResponse;
 import com.appirio.tech.core.api.v3.response.ApiResponseFactory;
 import com.appirio.tech.core.auth.AuthUser;
@@ -31,7 +35,7 @@ import com.codahale.metrics.annotation.Timed;
 
 /**
  * REST resource endpoint for clients
- * 
+ *
  * @author TCSCODER
  * @version 1.0
  */
@@ -39,7 +43,7 @@ import com.codahale.metrics.annotation.Timed;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientResource extends BaseResource {
-    
+
     /**
      * Logger
      */
@@ -52,7 +56,7 @@ public class ClientResource extends BaseResource {
 
     /**
      * Constructor to initialize client manager.
-     * 
+     *
      * @param clientManager
      *            manager for clients.
      */
@@ -63,18 +67,21 @@ public class ClientResource extends BaseResource {
 
     /**
      * Find all clients.
-     * 
+     *
      * @param user
      *            the currently logged in user
-     *            
+     *
      * @return the api response
      */
     @GET
-    public ApiResponse findAllClients(@Auth AuthUser user) {
+    public ApiResponse findAllClients(@Auth AuthUser user,
+        @APIQueryParam(repClass = Client.class) QueryParameter queryParameter,
+        @QueryParam("sort") String sort) {
         logger.debug("findAllClients");
         try {
             checkAdmin(user);
-            return MetadataApiResponseFactory.createResponse(clientManager.findAllClients());
+            prepareParameters(queryParameter, sort);
+            return MetadataApiResponseFactory.createResponse(clientManager.findAllClients(queryParameter));
         } catch (Exception e) {
             return ErrorHandler.handle(e, logger);
         }
@@ -82,7 +89,7 @@ public class ClientResource extends BaseResource {
 
     /**
      * Creates a new client.
-     * 
+     *
      * @param user
      *            The logged in user.
      * @param request
@@ -107,7 +114,7 @@ public class ClientResource extends BaseResource {
 
     /**
      * Fetches client based on id
-     * 
+     *
      * @param id
      *            The client id.
      * @return api response
@@ -127,7 +134,7 @@ public class ClientResource extends BaseResource {
 
     /**
      * Updates the client with the specified input data.
-     * 
+     *
      * @param id
      *            The client id to update.
      * @param request

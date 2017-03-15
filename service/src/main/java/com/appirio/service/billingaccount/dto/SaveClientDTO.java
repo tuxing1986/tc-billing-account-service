@@ -18,14 +18,19 @@ import lombok.Setter;
 
 /**
  * This DTO holds the information needed for creating/updating a user.
- *  
+ *
+ *  <p>
+ *  Changes in v 1.1 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Added customerNumber field
+ * </p>
+ *
  * @author TCSCODER.
- * @version 1.0
+ * @version 1.1
  */
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaveClientDTO {
-	
+
 	/**
 	 * The client name.
 	 */
@@ -33,7 +38,7 @@ public class SaveClientDTO {
 	@Setter
 	@NotBlank
 	private String name;
-	
+
 	/**
 	 * The client status.
 	 */
@@ -41,7 +46,7 @@ public class SaveClientDTO {
 	@Setter
 	@NotBlank
 	private String status;
-	
+
 	/**
 	 * The client start date.
 	 */
@@ -49,7 +54,7 @@ public class SaveClientDTO {
 	@Setter
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm'Z'", timezone="GMT")
 	private Date startDate;
-	
+
 	/**
 	 * The client end date.
 	 */
@@ -58,11 +63,20 @@ public class SaveClientDTO {
 	@NotNull
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm'Z'", timezone="GMT")
 	private Date endDate;
-	
+
 	/**
 	 * The client code name.
 	 */
 	@Getter
 	@Setter
 	private String codeName;
+
+	/**
+     * The client customer number.
+     *
+     * @since 1.1
+     */
+    @Getter
+    @Setter
+    private String customerNumber;
 }

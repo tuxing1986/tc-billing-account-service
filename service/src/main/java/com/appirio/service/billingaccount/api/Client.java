@@ -15,9 +15,14 @@ import lombok.Setter;
 
 /**
  * Represents a Client entity. It holds the client related fields.
- * 
+ *
+ *  <p>
+ *  Changes in v 1.1 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Added customerNumber field
+ * </p>
+ *
  * @author TCSCODER
- * @version 1.0
+ * @version 1.1
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,14 +33,14 @@ public class Client implements RESTResource {
 	@Getter
 	@Setter
 	private Long id;
-	
+
 	/**
 	 * The client name.
 	 */
 	@Getter
 	@Setter
 	private String name;
-	
+
 	/**
 	 * The client status
 	 */
@@ -50,7 +55,7 @@ public class Client implements RESTResource {
 	@Setter
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm'Z'", timezone="GMT")
 	private Date startDate;
-	
+
     /**
      * The client end date.
      */
@@ -58,11 +63,20 @@ public class Client implements RESTResource {
 	@Setter
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm'Z'", timezone="GMT")
 	private Date endDate;
-	
+
 	/**
 	 * The client code name.
 	 */
 	@Getter
 	@Setter
 	private String codeName;
+
+	/**
+     * The client customer number.
+     *
+     * @since 1.1
+     */
+    @Getter
+    @Setter
+    private String customerNumber;
 }

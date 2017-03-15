@@ -16,9 +16,11 @@ SELECT SKIP {offset} FIRST {limit}
       p.description AS description,
       p.subscription_number AS subscriptionNumber,
       p.company_id AS companyId,
-      p.is_manual_prize_setting AS manualPrizeSetting
-FROM  project p 
+      p.is_manual_prize_setting AS manualPrizeSetting,
+      cp.client_id AS clientId
+FROM  project p
 LEFT OUTER JOIN payment_terms pt ON pt.payment_terms_id = p.payment_terms_id
+LEFT OUTER JOIN client_project cp ON cp.project_id = p.project_id
 JOIN project_manager pm ON pm.project_id = p.project_id
 JOIN user_account ua ON ua.user_account_id = pm.user_account_id
 JOIN common_oltp\:user co ON co.user_id = :loggedInUser AND co.handle = ua.user_name

@@ -12,12 +12,19 @@ import com.appirio.service.billingaccount.dto.SaveClientDTO;
 import com.appirio.supply.SupplyException;
 import com.appirio.supply.dataaccess.QueryResult;
 import com.appirio.supply.dataaccess.db.IdGenerator;
+import com.appirio.tech.core.api.v3.request.QueryParameter;
 
 /**
  * Manager for clients business logic.
- * 
+ *
+ * <p>
+ *  Changes in v 1.1 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Added sort, limit and offset when finding all clients
+ *  -- Added support for filtering on name (partial match), status, start date, and end date
+ * </p>
+ *
  * @author TCSCODER
- * @version 1.0
+ * @version 1.1
  */
 public class ClientManager extends BaseManager {
 
@@ -33,7 +40,7 @@ public class ClientManager extends BaseManager {
 
     /**
      * Creates and initializes a new ClientManager instance with the specified DAO and id generator.
-     *  
+     *
      * @param clientDAO The client DAO.
      * @param idGenerator  The client id generator.
      */
@@ -44,20 +51,20 @@ public class ClientManager extends BaseManager {
 
     /**
      * Gets all clients available in the persistence. It simply delegates the call to the underlying DAO.
-     * 
+     *
      * @return The list of all clients.
      */
-    public QueryResult<List<Client>> findAllClients() {
-        return clientDAO.findAllClients();
+    public QueryResult<List<Client>> findAllClients(QueryParameter queryParameter) {
+        return clientDAO.findAllClients(queryParameter);
     }
 
     /**
      * Adds a new client.
-     * 
+     *
      * @param clientDTO The client data to add.
      * @param userId The id of the user who adds the client, used for auditing.
      * @return The newly added Client instance with id populated.
-     * 
+     *
      * @throws SupplyException If any error occurs during the operation.
      */
     public Client addNewClient(SaveClientDTO clientDTO, String userId) throws SupplyException {
@@ -74,10 +81,10 @@ public class ClientManager extends BaseManager {
         if (clientDTO.getStartDate() == null) {
             clientDTO.setStartDate(new Date());
         }
-        
+
         // Create the client in the persistence.
         clientDAO.addNewClient(id, clientDTO.getName(), activeFlag, clientDTO.getStartDate(), clientDTO.getEndDate(),
-                clientDTO.getCodeName(), userId);
+                clientDTO.getCodeName(), userId, clientDTO.getCustomerNumber());
 
         // return the created client instance.
         return clientDAO.getClientById(id);
@@ -85,7 +92,7 @@ public class ClientManager extends BaseManager {
 
     /**
      * Retrieves the Client identified by the given clientId
-     * 
+     *
      * @param clientId The of the client to retrieve.
      * @return The Client instance matching the specified id.
      */
@@ -95,13 +102,13 @@ public class ClientManager extends BaseManager {
 
     /**
      * Updated the client identified by the specified clientId with the supplied clientDTO data.
-     * 
-     * @param clientId The id of the client to update. 
+     *
+     * @param clientId The id of the client to update.
      * @param clientDTO The client data to be set for the updated client.
      * @param userId The id of the user who updates the client data, used for auditing purpose.
-     * 
+     *
      * @return The updated Client instance.
-     * 
+     *
      * @throws SupplyException If any error occurs during the operation.
      */
     public Client updateClient(Long clientId, SaveClientDTO clientDTO, String userId) throws SupplyException {
@@ -130,7 +137,7 @@ public class ClientManager extends BaseManager {
 
         // Update the client in the persistence
         clientDAO.updateClient(clientId, clientDTO.getName(), activeFlag, clientDTO.getStartDate(),
-                clientDTO.getEndDate(), clientDTO.getCodeName(), userId);
+                clientDTO.getEndDate(), clientDTO.getCodeName(), userId, clientDTO.getCustomerNumber());
 
         // return the updated client instance.
         return clientDAO.getClientById(clientId);
