@@ -5,12 +5,12 @@ package com.appirio.service.billingaccount.resources;
 
 import com.appirio.service.billingaccount.api.BillingAccount;
 import com.appirio.service.billingaccount.api.BillingAccountUpdatedDTO;
+import com.appirio.service.billingaccount.api.BillingAccountUser;
 import com.appirio.service.billingaccount.api.UserIdDTO;
 import com.appirio.service.billingaccount.manager.BillingAccountManager;
 import com.appirio.service.supply.resources.MetadataApiResponseFactory;
 import com.appirio.supply.ErrorHandler;
 import com.appirio.supply.SupplyException;
-import com.appirio.tech.core.api.v3.request.OrderByQuery;
 import com.appirio.tech.core.api.v3.request.QueryParameter;
 import com.appirio.tech.core.api.v3.request.annotation.APIQueryParam;
 import com.appirio.tech.core.api.v3.response.ApiResponse;
@@ -31,22 +31,25 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.List;
 
 /**
  * REST resource endpoint for billing accounts.
- * 
+ *
  * <p>
- * Changes in v1.1 FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES 
+ * Changes in v1.1 FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES
  * -- Moved the checkAdmin() method to the BaseResource class and make this class extend from it.
  * -- Changed the API paths from billingAccounts to billing-accounts.
  * </p>
- * 
+ *
+ * <p>
+ *  Changes in v 1.2 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Add offset and limit parameters for searchMyBillingAccounts() and getBillingAccountUsers()
+ * </p>
+ *
  * @author TCSCODER, TCSCODER.
- * @version 1.1
+ * @version 1.2
  */
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -58,28 +61,13 @@ public class BillingAccountResource extends BaseResource {
     private static final Logger logger = LoggerFactory.getLogger(BillingAccountResource.class);
 
     /**
-     * The constant to hold the startDate String value.
-     */
-    private static final String START_DATE = "startDate";
-
-    /**
-     * The constant to hold the endDate String value.
-     */
-    private static final String END_DATE = "endDate";
-
-    /**
      * billing account manager
      */
     private BillingAccountManager billingAccountManager;
 
     /**
-     * Date formatter to parse the date filters
-     */
-    private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-
-    /**
      * Constructor to initialize billing account manager
-     * 
+     *
      * @param billingAccountManager
      *            manager for billing accounts
      */
@@ -89,7 +77,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Search for billing accounts.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param queryParameter
@@ -115,7 +103,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Create a new billing account.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param request
@@ -136,7 +124,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Get a billing account by id.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccountId
@@ -157,7 +145,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Update a billing account.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccountId
@@ -186,7 +174,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Get users for a billing account.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccountId
@@ -195,12 +183,16 @@ public class BillingAccountResource extends BaseResource {
      */
     @GET
     @Path("billing-accounts/{billingAccountId}/users")
-    public ApiResponse getBillingAccountUsers(@Auth AuthUser user, @PathParam("billingAccountId") Long billingAccountId) {
+    public ApiResponse getBillingAccountUsers(@Auth AuthUser user,
+        @PathParam("billingAccountId") Long billingAccountId,
+        @APIQueryParam(repClass = BillingAccountUser.class) QueryParameter queryParameter,
+        @QueryParam("sort") String sort) {
         try {
             checkAdmin(user);
+            prepareParameters(queryParameter, sort);
             getBillingAccounts(billingAccountId);
             return MetadataApiResponseFactory.createResponse(billingAccountManager
-                    .getBillingAccountUsers(billingAccountId));
+                    .getBillingAccountUsers(billingAccountId, queryParameter));
         } catch (Exception e) {
             return ErrorHandler.handle(e, logger);
         }
@@ -208,7 +200,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Add user to a billing account.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccountId
@@ -233,7 +225,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Remove user from a billing account.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccountId
@@ -260,7 +252,7 @@ public class BillingAccountResource extends BaseResource {
 
     /**
      * Search for billing accounts restricted to the logged in user.
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param queryParameter
@@ -284,31 +276,9 @@ public class BillingAccountResource extends BaseResource {
     }
 
     /**
-     * Prepare date filters and sort column to make it usable by the DAO.
-     * 
-     * @param queryParameter
-     *            the query parameters
-     * @param sort
-     *            the sort column
-     */
-    private void prepareParameters(QueryParameter queryParameter, String sort) throws ParseException {
-        if (sort != null) {
-            queryParameter.setOrderByQuery(OrderByQuery.instanceFromRaw(sort));
-        }
-        if (queryParameter.getFilter().getFields().contains(START_DATE)) {
-            queryParameter.getFilter().put(START_DATE,
-                    formatter.parse(queryParameter.getFilter().get(START_DATE).toString()).getTime() / 1000);
-        }
-        if (queryParameter.getFilter().getFields().contains(END_DATE)) {
-            queryParameter.getFilter().put(END_DATE,
-                    formatter.parse(queryParameter.getFilter().get(END_DATE).toString()).getTime() / 1000);
-        }
-    }
-
-    /**
      * Get billing account by id. Can either be used to verify that an account exists or to get the original billing
      * account.
-     * 
+     *
      * @param billingAccountId
      *            the billing account id
      */

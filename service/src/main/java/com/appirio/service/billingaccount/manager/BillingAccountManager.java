@@ -20,19 +20,26 @@ import java.util.List;
 
 /**
  * Manager for billing account business logic
- * 
+ *
  * <p>
- * Changes in v1.1 FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES 
- * -- Updated createBillingAccount() to pass additional parameters (description, subscriptionNumber , companyId and 
- *    manual prize setting) to the billingAccountDAO.createBillingAccount(). 
- * -- Added validateCompanyId() to validate the input company id. 
+ * Changes in v1.1 FAST 72HRS!! - ADD APIS FOR CLIENTS AND SOME LOGIC CHANGES
+ * -- Updated createBillingAccount() to pass additional parameters (description, subscriptionNumber , companyId and
+ *    manual prize setting) to the billingAccountDAO.createBillingAccount().
+ * -- Added validateCompanyId() to validate the input company id.
  * -- Updated the business logic to use userId instead of user handle for auditing purpose.
  * -- changed to extend from BaseResource to gain access to the helper method for converting the status to 'active' flag value.
  * -- Added userAccountIdGenerator reference to be used to generate the ids of the new user accounts.
  * </p>
- * 
+ *
+ * <p>
+ *  Changes in v 1.2 Fast 48hrs!! Topcoder - Improvement For Billing Account Service
+ *  -- Updated createBillingAccount() to support budgetAmount
+ *  -- Updated createBillingAccount() and updateBillingAccount() to associate billing account to client
+ *  -- Updated getBillingAccountUsers() to support limit and offset
+ * </p>
+ *
  * @author TCSCODER, TCSCODER
- * @version 1.1
+ * @version 1.2
  */
 public class BillingAccountManager extends BaseManager {
 
@@ -53,7 +60,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Constructor for billing account manager
-     * 
+     *
      * @param billingAccountDAO
      *            The billing account DAO.
      * @param billingAccountIdGenerator
@@ -70,7 +77,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Search for billing accounts
-     * 
+     *
      * @param queryParameter
      *            sort and filter parameters
      * @return the billing accounts
@@ -81,7 +88,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Search for billing accounts limited by the privileges of the logged in user
-     * 
+     *
      * @param userId
      *            the user id of the logged in user
      * @param queryParameter
@@ -94,7 +101,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Create a billing account
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccount
@@ -110,19 +117,27 @@ public class BillingAccountManager extends BaseManager {
         // validate the provided companyId
         validateCompanyId(billingAccount.getCompanyId());
 
+        // validate the provided clientId
+        validateClientId(billingAccount.getClientId());
+
         Long id = billingAccountIdGenerator.getNextId();
         LoggerFactory.getLogger(BillingAccountManager.class).debug("Next ID: " + id);
-        billingAccountDAO.createBillingAccount(id, billingAccount.getName(), billingAccount.getPaymentTerms().getId(),
+        billingAccountDAO.createBillingAccount(id, billingAccount.getBudgetAmount(),
+                billingAccount.getName(), billingAccount.getPaymentTerms().getId(),
                 billingAccount.getStartDate(), billingAccount.getEndDate(), activeFlag, user.getUserId().toString(),
                 billingAccount.getSalesTax(), billingAccount.getPoNumber(), billingAccount.getDescription(),
                 billingAccount.getSubscriptionNumber(), billingAccount.getCompanyId(),
+                billingAccount.getManualPrizeSetting(), billingAccount.getClientId());
+
+                // map billing account to client
+                billingAccountDAO.addBillingAccountToClient(id, billingAccount.getClientId(), user.getUserId().getId());
                 billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
         return billingAccountDAO.getBillingAccount(id);
     }
 
     /**
      * Get a billing account by id
-     * 
+     *
      * @param billingAccountId
      *            the id
      * @return the billing account with the given id
@@ -133,7 +148,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Update a billing account
-     * 
+     *
      * @param user
      *            the currently logged in user
      * @param billingAccount
@@ -149,28 +164,40 @@ public class BillingAccountManager extends BaseManager {
         // validate the provided companyId
         validateCompanyId(billingAccount.getCompanyId());
 
+        // validate the provided clientId
+        validateClientId(billingAccount.getClientId());
+
         billingAccountDAO.updateBillingAccount(billingAccount.getId(), billingAccount.getBudgetAmount(),
                 billingAccount.getName(), billingAccount.getPaymentTerms().getId(), billingAccount.getStartDate(),
                 billingAccount.getEndDate(), activeFlag, user.getUserId().getId(), billingAccount.getSalesTax(),
                 billingAccount.getPoNumber(), billingAccount.getDescription(), billingAccount.getSubscriptionNumber(),
+                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getClientId());
+
+        // remove the old mapping record between client and billing account
+        billingAccountDAO.removeBillingAccountFromClient(billingAccount.getId());
+
+        // add new mapping record between client and billing account
+        billingAccountDAO.addBillingAccountToClient(billingAccount.getId(), billingAccount.getClientId(), user.getUserId().getId());
                 billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
         return billingAccountDAO.getBillingAccount(billingAccount.getId());
     }
 
     /**
      * Get users for given billing account
-     * 
+     *
      * @param billingAccountId
      *            the billing account id
+     * @param queryParameter
+     *            sort and filter parameters
      * @return return the users associated with the billing account
      */
-    public QueryResult<List<BillingAccountUser>> getBillingAccountUsers(Long billingAccountId) {
-        return billingAccountDAO.getBillingAccountUsers(billingAccountId);
+    public QueryResult<List<BillingAccountUser>> getBillingAccountUsers(Long billingAccountId, QueryParameter queryParameter) {
+        return billingAccountDAO.getBillingAccountUsers(billingAccountId, queryParameter);
     }
 
     /**
      * Add user to a billing account
-     * 
+     *
      * @param billingAccountId
      *            the billing account id
      * @param userId
@@ -209,7 +236,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Remove user from billing account
-     * 
+     *
      * @param billingAccountId
      *            the billing account id
      * @param userId
@@ -245,7 +272,7 @@ public class BillingAccountManager extends BaseManager {
 
     /**
      * Checks whether company identified by the given id exists in the persistence.
-     * 
+     *
      * @param companyId
      *            The id of the company to check if it exists
      */
@@ -254,6 +281,20 @@ public class BillingAccountManager extends BaseManager {
         if (id == null) {
             throw new IllegalArgumentException(String.format(
                     "The company identified by id = %s, " + "does not exist.", companyId));
+        }
+    }
+
+    /**
+     * Checks whether client identified by the given id exists in the persistence.
+     *
+     * @param clientId
+     *            The id of the client to check if it exists
+     */
+    private void validateClientId(Long clientId) {
+        IdDTO id = billingAccountDAO.checkClientExists(clientId);
+        if (id == null) {
+            throw new IllegalArgumentException(String.format(
+                    "The client identified by id = %s, " + "does not exist.", clientId));
         }
     }
 }

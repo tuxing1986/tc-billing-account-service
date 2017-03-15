@@ -16,8 +16,10 @@ SELECT SKIP {offset} FIRST {limit}
        p.description AS description,
        p.subscription_number AS subscriptionNumber,
        p.company_id AS companyId,
-       p.is_manual_prize_setting AS manualPrizeSetting
+       p.is_manual_prize_setting AS manualPrizeSetting,
+       cp.client_id AS clientId
 FROM project p
-LEFT OUTER JOIN payment_terms pt ON pt.payment_terms_id = p.payment_terms_id 
+LEFT OUTER JOIN payment_terms pt ON pt.payment_terms_id = p.payment_terms_id
+LEFT OUTER JOIN client_project cp ON cp.project_id = p.project_id
 WHERE  {filter}
 ORDER BY {order}
