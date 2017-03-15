@@ -127,11 +127,11 @@ public class BillingAccountManager extends BaseManager {
                 billingAccount.getStartDate(), billingAccount.getEndDate(), activeFlag, user.getUserId().toString(),
                 billingAccount.getSalesTax(), billingAccount.getPoNumber(), billingAccount.getDescription(),
                 billingAccount.getSubscriptionNumber(), billingAccount.getCompanyId(),
-                billingAccount.getManualPrizeSetting(), billingAccount.getClientId());
+                billingAccount.getManualPrizeSetting(), billingAccount.getClientId(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
 
                 // map billing account to client
                 billingAccountDAO.addBillingAccountToClient(id, billingAccount.getClientId(), user.getUserId().getId());
-                billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
+
         return billingAccountDAO.getBillingAccount(id);
     }
 
@@ -171,14 +171,14 @@ public class BillingAccountManager extends BaseManager {
                 billingAccount.getName(), billingAccount.getPaymentTerms().getId(), billingAccount.getStartDate(),
                 billingAccount.getEndDate(), activeFlag, user.getUserId().getId(), billingAccount.getSalesTax(),
                 billingAccount.getPoNumber(), billingAccount.getDescription(), billingAccount.getSubscriptionNumber(),
-                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getClientId());
+                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getClientId(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
 
-        // remove the old mapping record between client and billing account
-        billingAccountDAO.removeBillingAccountFromClient(billingAccount.getId());
+                // remove the old mapping record between client and billing account
+                billingAccountDAO.removeBillingAccountFromClient(billingAccount.getId());
 
-        // add new mapping record between client and billing account
-        billingAccountDAO.addBillingAccountToClient(billingAccount.getId(), billingAccount.getClientId(), user.getUserId().getId());
-                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
+                // add new mapping record between client and billing account
+                billingAccountDAO.addBillingAccountToClient(billingAccount.getId(), billingAccount.getClientId(), user.getUserId().getId());
+
         return billingAccountDAO.getBillingAccount(billingAccount.getId());
     }
 
