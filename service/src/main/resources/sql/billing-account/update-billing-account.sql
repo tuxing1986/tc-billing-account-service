@@ -12,6 +12,7 @@ SET    name = :name,
        description = :description,
        subscription_number = :subscriptionNumber,
        company_id = :companyId,
-       is_manual_prize_setting = :manualPrizeSetting
+       is_manual_prize_setting = :manualPrizeSetting,
+       billable = :billable
 WHERE
        project_id = :billingAccountId
