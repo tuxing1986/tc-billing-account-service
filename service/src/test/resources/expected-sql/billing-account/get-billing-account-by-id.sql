@@ -16,7 +16,8 @@ SELECT p.project_id AS id,
        p.subscription_number AS subscriptionNumber,
        p.company_id AS companyId,
        p.is_manual_prize_setting AS manualPrizeSetting,
-       cp.client_id AS clientId
+       cp.client_id AS clientId,
+       p.billable as billable
 FROM project p
 LEFT OUTER JOIN  payment_terms pt ON pt.payment_terms_id = p.payment_terms_id
 LEFT OUTER JOIN client_project cp ON cp.project_id = p.project_id

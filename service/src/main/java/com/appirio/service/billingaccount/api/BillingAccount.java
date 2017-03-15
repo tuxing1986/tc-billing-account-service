@@ -32,6 +32,11 @@ import java.util.Date;
  *  -- Added new field: clientId
  * </p>
  *
+ * <p>
+ *  Changes in v 1.2 :
+ *  -- Added new field : billable
+ * </p>
+ * 
  * @author TCSCODER, TCSCODER
  * @version 1.2
  */
@@ -152,4 +157,12 @@ public class BillingAccount extends BaseModel {
     @Setter
     @NotNull
     private Long clientId;
+
+  /** 
+   * The flag indicating this account is billable.
+	 * @since 1.2
+	 */
+	@Getter
+	@Setter
+	private Boolean billable;
 }

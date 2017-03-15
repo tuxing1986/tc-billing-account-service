@@ -539,6 +539,9 @@ definitions:
       budgetAmount:
         type: number
         description: The billing account budget amount.
+      billable:
+        type: boolean
+        description: The flag indicating whether this account is billable.
           
   PaymentTerms:
    type: object
@@ -683,6 +686,9 @@ definitions:
       clientId:
         type: number
         description: The client id  
+      billable:
+        type: boolean
+        description: the flag indicating the account is billable.
       createdAt:
         type: string
         description: Datetime (GMT) when task was created
@@ -701,6 +707,7 @@ definitions:
         format: int64
         description: READ-ONLY. User that last updated this task
         readOnly: true
+      
 
   BillingAccountUser:
     type: object

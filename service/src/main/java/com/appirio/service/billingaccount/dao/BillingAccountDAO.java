@@ -78,7 +78,8 @@ public interface BillingAccountDAO {
      * @param companyId The id of the company to which the billing account is associated.
      * @param manualPrizeSetting The manual prize setting flag
      * @param clientId the id of the client to which the billing account is associated.
-     *
+     * @param billable the flag indicating the account is billable
+     * 
      * @return the id of the created billing account
      */
     @SqlUpdateFile("sql/billing-account/create-billing-account.sql")
@@ -91,7 +92,9 @@ public interface BillingAccountDAO {
                               @Bind("subscriptionNumber") String subscriptionNumber,
                               @Bind("companyId") Long companyId,
                               @Bind("manualPrizeSetting") Long manualPrizeSetting,
-                              @Bind("clientId") Long clientId);
+                              @Bind("clientId") Long clientId,
+                              @Bind("billable") boolean billable
+                              );
 
     /**
      * Get a billing account by id
@@ -119,6 +122,7 @@ public interface BillingAccountDAO {
      * @param companyId The company id.
      * @param manualPrizeSetting The manual prize setting flag
      * @param clientId the id of the client to which the billing account is associated.
+     * @param billable the flag indicating the account is billable
      */
     @SqlUpdateFile("sql/billing-account/update-billing-account.sql")
     void updateBillingAccount(@Bind("billingAccountId") Long billingAccountId, @Bind("budgetAmount") Float budgetAmount,
@@ -130,7 +134,8 @@ public interface BillingAccountDAO {
                               @Bind("subscriptionNumber") String subscriptionNumber,
                               @Bind("companyId") Long companyId,
                               @Bind("manualPrizeSetting") Long manualPrizeSetting,
-                              @Bind("clientId") Long clientId);
+                              @Bind("clientId") Long clientId,
+                              @Bind("billable") boolean billable);
 
     /**
      * Get users for given billing account

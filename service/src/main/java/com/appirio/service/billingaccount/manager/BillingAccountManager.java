@@ -128,8 +128,10 @@ public class BillingAccountManager extends BaseManager {
                 billingAccount.getSalesTax(), billingAccount.getPoNumber(), billingAccount.getDescription(),
                 billingAccount.getSubscriptionNumber(), billingAccount.getCompanyId(),
                 billingAccount.getManualPrizeSetting(), billingAccount.getClientId());
-        // map billing account to client
-        billingAccountDAO.addBillingAccountToClient(id, billingAccount.getClientId(), user.getUserId().getId());
+
+                // map billing account to client
+                billingAccountDAO.addBillingAccountToClient(id, billingAccount.getClientId(), user.getUserId().getId());
+                billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
         return billingAccountDAO.getBillingAccount(id);
     }
 
@@ -176,6 +178,7 @@ public class BillingAccountManager extends BaseManager {
 
         // add new mapping record between client and billing account
         billingAccountDAO.addBillingAccountToClient(billingAccount.getId(), billingAccount.getClientId(), user.getUserId().getId());
+                billingAccount.getCompanyId(), billingAccount.getManualPrizeSetting(), billingAccount.getBillable() != null ? billingAccount.getBillable() : false);
         return billingAccountDAO.getBillingAccount(billingAccount.getId());
     }
 
