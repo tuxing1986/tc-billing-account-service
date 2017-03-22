@@ -33,6 +33,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -116,18 +117,14 @@ public class BillingAccountResource extends BaseResource {
     public ApiResponse createBillingAccount(@Auth AuthUser user, @Valid PostPutRequest<BillingAccount> request) {
         try {
             checkAdmin(user);
-            if (request.getMethod() == null) {
-                throw new SupplyException("The method parameter should be provided", 400);
-            } else {
-                if ("post".equals(request.getMethod().toLowerCase())) {
-                    return MetadataApiResponseFactory
-                            .createResponse(billingAccountManager.createBillingAccount(user, request.getParam()));
-                } else if ("put".equals(request.getMethod().toLowerCase())) {
-                    return MetadataApiResponseFactory
-                            .createResponse(billingAccountManager.updateBillingAccount(user, request.getParam()));
-                }
-                throw new SupplyException("method should be either POST or PUT");
+            String method = request.getMethod();
+            checkMethod(method);
+            if (method != null && Arrays.asList("put", "patch").contains(method.toLowerCase())) {
+                return MetadataApiResponseFactory
+                        .createResponse(billingAccountManager.updateBillingAccount(user, request.getParam()));
             }
+            return MetadataApiResponseFactory
+                    .createResponse(billingAccountManager.createBillingAccount(user, request.getParam()));
 
         } catch (Exception e) {
             return ErrorHandler.handle(e, logger);

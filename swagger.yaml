@@ -67,7 +67,7 @@ paths:
       security:
         - Bearer: []
       operationId: addNewClient
-      description: Create a new client, Admin user only.
+      description: Create a new client or update an existed client, Admin user only. If method is POST or not set, a new client will be created. You can update an exsiting client when method is PUT or PATCH
       parameters:
         - in: body
           name: body
@@ -196,7 +196,7 @@ paths:
       security:
         - Bearer: []
       operationId: addBillingAccount
-      description: Create or update a billing account, Admin user only. If method is "POST", then it will create a new account. The account will be updated when method is "PUT"
+      description: Create or update a billing account, Admin user only. If method is "POST", then it will create a new account. The account will be updated when method is "PUT" or "PATCH"
       parameters:
         - in: body
           name: body
@@ -556,13 +556,16 @@ definitions:
         $ref: "#/definitions/NewBillingAccount"
       method:
         type: string
-        description: should be either POST or PUT
+        description: should be POST, PUT, or PATCH
 
   NewClientBodyParam:
     type: object
     properties:
       param:
         $ref: "#/definitions/NewClient"
+      method:
+        type: string
+        description: Should be POST, PUT, or PATCH
 
   BillingAccountBodyParam:
     type: object

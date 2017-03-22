@@ -205,7 +205,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"param\":{\n    \"id\": 21,\n\t\"salesTax\": 1.6,\n\t\"name\": \"New billing account2\",\n\t\"poNumber\": \"New POOO\",\n\t\"paymentTerms\": {\n\t  \"id\": 1,\n\t  \"description\": \"test\"\n\t},\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z\",\n\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\"description\": \"The billing account description\",\n\t\"companyId\":1,\n\t\"clientId\": 1,\n\t\"subscriptionNumber\":25,\n\t\"manualPrizeSetting\":1\n}, \n    \"method\": \"PUT\"\n}"
+							"raw": "{\n    \"param\":{\n    \"id\": 21,\n\t\"salesTax\": 1.6,\n\t\"name\": \"New billing account2\",\n\t\"poNumber\": \"New POOO\",\n\t\"paymentTerms\": {\n\t  \"id\": 1,\n\t  \"description\": \"test\"\n\t},\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z\",\n\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\"description\": \"The billing account description\",\n\t\"companyId\":1,\n\t\"clientId\": 1,\n\t\"subscriptionNumber\":250,\n\t\"manualPrizeSetting\":1\n}, \n    \"method\": \"PUT\"\n}"
 						},
 						"description": ""
 					},
@@ -360,6 +360,31 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "Get Billing Account Users with Pagination",
+					"request": {
+						"url": "{{apiUrl}}/v3/billing-accounts/3/users?limit=1&offset=1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 30005540,\n\t\"customerNumber\": \"1\",\n\t\"name\": \"rest test\",\n\t\"status\": \"Active\",\n\t\"startDate\": \"2017-04-01T09:00Z-04\",\n\t\"endDate\": \"2017-05-20T09:00Z-04\",\n\t\"budgetAmount\": 12345\n}"
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -411,7 +436,32 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"param\" : {\n\t\t\"name\":\"Test Client2\",\n\t\t\"status\":\"Active\",\n\t\t\"startDate\": \"2017-02-12T09:00Z\",\n\t\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\t\"codeName\": \"CodeName 1\"\n\t}\n}"
+							"raw": "{\n\t\"param\" : {\n\t\t\"name\":\"Test Client5\",\n\t\t\"status\":\"Active\",\n\t\t\"startDate\": \"2017-02-12T09:00Z\",\n\t\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\t\"codeName\": \"CodeName 1\",\n\t\t\"customerNumber\": \"number\"\n\t},\n\t\"method\" : \"POST\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"param\" : {\n\t\t\"id\" : 1,\n\t\t\"name\":\"Test Client5\",\n\t\t\"status\":\"Active\",\n\t\t\"startDate\": \"2017-02-12T09:00Z\",\n\t\t\"endDate\": \"2017-05-20T09:00Z\",\n\t\t\"codeName\": \"CodeName 1\",\n\t\t\"customerNumber\": \"number\"\n\t},\n\t\"method\" : \"PUT\"\n}"
 						},
 						"description": ""
 					},
@@ -462,6 +512,106 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"param\" : {\n\t\t\"name\":\"Update client #s2\",\n\t\t\"status\":\"Inactive\",\n\t\t\"startDate\": \"2017-02-14T09:00Z\",\n\t\t\"endDate\": \"2017-05-21T09:00Z\",\n\t\t\"codeName\": \"CodeName 4\"\n\t}\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Clients with Limit and Offset",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients?limit=1&offset=1&sort=endDate",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Clients by Status",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients?filter=status%3D1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Clients by Name",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients?filter=name%3DAC",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Clients by Date",
+					"request": {
+						"url": "{{apiUrl}}/v3/clients?filter=endDate%3D2015-05-19T09%3A00Z",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin-token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
 						"description": ""
 					},
