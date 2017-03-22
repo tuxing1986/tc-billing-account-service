@@ -1,13 +1,13 @@
 swagger: "2.0"
 info:
   version: "1.0.1"
-  title: "Billing Account and Clients API"
+  title: "Billing Account and Client API"
 # during production,should point to your server machine
 host: api.topcoder-dev.com
 basePath: "/v3"
 # during production, should use https
 schemes:
-- "http"
+- "https"
 produces:
 - application/json
 consumes:
@@ -27,7 +27,7 @@ paths:
       security:
         - Bearer: []
       operationId: findAllClients
-      description: Retreive all clients, Admin user only.
+      description: Retreive all clients. Availble to admin user only.
       parameters:
         - $ref: "#/parameters/offsetParam"
         - $ref: "#/parameters/limitParam"
@@ -67,7 +67,7 @@ paths:
       security:
         - Bearer: []
       operationId: addNewClient
-      description: Create a new client, Admin user only.
+      description: Create a new client or update an existed client, Admin user only. If method is POST or not set, a new client will be created. You can update an exsiting client when method is PUT or PATCH
       parameters:
         - in: body
           name: body
@@ -115,7 +115,7 @@ paths:
 
     patch:
       tags:
-        - billingaccount
+        - client
       security:
         - Bearer: []
       operationId: updateClient
@@ -196,7 +196,7 @@ paths:
       security:
         - Bearer: []
       operationId: addBillingAccount
-      description: Create a new billing account, Admin user only.
+      description: Create or update a billing account, Admin user only. If method is "POST", then it will create a new account. The account will be updated when method is "PUT" or "PATCH"
       parameters:
         - in: body
           name: body
@@ -329,11 +329,7 @@ paths:
           name: body
           required: true
           schema:
-            type: object
-            properties:
-              userId:
-                type: integer
-                format: int64
+            $ref: "#/definitions/AddAccountUserRequest"
 
   /billing-accounts/{billingAccountId}/users/{userId}:
     delete:
@@ -477,10 +473,10 @@ definitions:
     properties:
       name:
         type: string
-        description: The client name
+        description: The client name (up to 64 characters)
       status:
         type: string
-        description: the client status
+        description: the client status (ACTIVE or INACTIVE)
       startDate:
         type: string
         description: billing account start date, Datetime (GMT)
@@ -489,10 +485,10 @@ definitions:
         description: billing account end date, Datetime (GMT)
       codeName:
         type: string
-        description: the client code name
+        description: the client code name (optional)
       customerNumber:
         type: string
-        description: the client customer number
+        description: the client customer number. This is an external reference code (optional)
 
   NewBillingAccount:
     type: object
@@ -503,13 +499,13 @@ definitions:
     properties:
       name:
         type: string
-        description: billing account name      
+        description: billing account name (up to 64 characters)      
       description:
         type: string
-        description: billing account description
+        description: billing account description (up to 255 characters)
       status:
         type: string
-        description: BillingAccount status
+        description: BillingAccount status (ACTIVE or INACTIVE)
       startDate:
         type: string
         description: billing account start date, Datetime (GMT)
@@ -518,19 +514,19 @@ definitions:
         description: billing account end date, Datetime (GMT)
       companyId:
         type: number
-        description: The company id
+        description: The company id. This will always be set to 1.
       subscriptionNumber:
         type: number
-        description: The subscription number
+        description: The subscription number. Reference to a customer subscription.
       manualPrizeSetting:
         type: number
-        description: The manual prize setting
+        description: The manual prize setting. Not used.  Set to 0.
       clientId:
         type: number
-        description: The client id
+        description: The client id. Set this to the client that the billing account is for.
       poNumber:
         type: string
-        description: The po box number
+        description: The PO number as defined by finance.
       paymentTerms:
         $ref: "#/definitions/PaymentTerms"
       salesTax:
@@ -541,7 +537,7 @@ definitions:
         description: The billing account budget amount.
       billable:
         type: boolean
-        description: The flag indicating whether this account is billable.
+        description: The flag indicating whether this account is billable. If unset it will be set to false.
           
   PaymentTerms:
    type: object
@@ -558,12 +554,18 @@ definitions:
     properties:
       param:
         $ref: "#/definitions/NewBillingAccount"
+      method:
+        type: string
+        description: should be POST, PUT, or PATCH
 
   NewClientBodyParam:
     type: object
     properties:
       param:
         $ref: "#/definitions/NewClient"
+      method:
+        type: string
+        description: Should be POST, PUT, or PATCH
 
   BillingAccountBodyParam:
     type: object
@@ -790,6 +792,12 @@ definitions:
             type: array
             items:
               $ref: "#/definitions/BillingAccount"
+  AddAccountUserRequest:
+    title: The request to add a user to an account.
+    type: object
+    properties:
+      userId:
+        type: integer
 
   BillingAccountUserListResponse:
     title: List response
