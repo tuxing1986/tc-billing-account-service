@@ -11,6 +11,7 @@ import com.appirio.service.billingaccount.manager.BillingAccountManager;
 import com.appirio.service.supply.resources.MetadataApiResponseFactory;
 import com.appirio.supply.ErrorHandler;
 import com.appirio.supply.SupplyException;
+import com.appirio.tech.core.api.v3.request.PostPutRequest;
 import com.appirio.tech.core.api.v3.request.QueryParameter;
 import com.appirio.tech.core.api.v3.request.annotation.APIQueryParam;
 import com.appirio.tech.core.api.v3.response.ApiResponse;
@@ -112,11 +113,22 @@ public class BillingAccountResource extends BaseResource {
      */
     @POST
     @Path("billing-accounts")
-    public ApiResponse createBillingAccount(@Auth AuthUser user, @Valid BillingAccount request) {
+    public ApiResponse createBillingAccount(@Auth AuthUser user, @Valid PostPutRequest<BillingAccount> request) {
         try {
             checkAdmin(user);
-            return MetadataApiResponseFactory
-                    .createResponse(billingAccountManager.createBillingAccount(user, request));
+            if (request.getMethod() == null) {
+                throw new SupplyException("The method parameter should be provided", 400);
+            } else {
+                if ("post".equals(request.getMethod().toLowerCase())) {
+                    return MetadataApiResponseFactory
+                            .createResponse(billingAccountManager.createBillingAccount(user, request.getParam()));
+                } else if ("put".equals(request.getMethod().toLowerCase())) {
+                    return MetadataApiResponseFactory
+                            .createResponse(billingAccountManager.updateBillingAccount(user, request.getParam()));
+                }
+                throw new SupplyException("method should be either POST or PUT");
+            }
+
         } catch (Exception e) {
             return ErrorHandler.handle(e, logger);
         }
@@ -157,14 +169,14 @@ public class BillingAccountResource extends BaseResource {
     @PATCH
     @Path("billing-accounts/{billingAccountId}")
     public ApiResponse updateBillingAccount(@Auth AuthUser user, @PathParam("billingAccountId") Long billingAccountId,
-            @Valid BillingAccount request) {
+            @Valid PostPutRequest<BillingAccount> request) {
         try {
             checkAdmin(user);
             List<BillingAccount> originals = getBillingAccounts(billingAccountId);
             BillingAccount original = originals.get(0);
             // make sure to update the correct billing account
-            request.setId(billingAccountId);
-            BillingAccount updated = billingAccountManager.updateBillingAccount(user, request).getData().get(0);
+            request.getParam().setId(billingAccountId);
+            BillingAccount updated = billingAccountManager.updateBillingAccount(user, request.getParam()).getData().get(0);
             BillingAccountUpdatedDTO response = new BillingAccountUpdatedDTO(original, updated);
             return ApiResponseFactory.createResponse(response);
         } catch (Exception e) {
@@ -212,12 +224,12 @@ public class BillingAccountResource extends BaseResource {
     @POST
     @Path("billing-accounts/{billingAccountId}/users")
     public ApiResponse addUserToBillingAccount(@Auth AuthUser user,
-            @PathParam("billingAccountId") Long billingAccountId, @Valid UserIdDTO request) {
+            @PathParam("billingAccountId") Long billingAccountId, @Valid PostPutRequest<UserIdDTO> request) {
         try {
             checkAdmin(user);
             getBillingAccounts(billingAccountId);
             return MetadataApiResponseFactory.createResponse(billingAccountManager.addUserToBillingAccount(user,
-                    billingAccountId, request.getUserId()));
+                    billingAccountId, request.getParam().getUserId()));
         } catch (Exception e) {
             return ErrorHandler.handle(e, logger);
         }
