@@ -4,18 +4,26 @@
 package com.appirio.service.billingaccount.manager;
 
 import com.appirio.service.billingaccount.api.BillingAccount;
+import com.appirio.service.billingaccount.api.BillingAccountFees;
 import com.appirio.service.billingaccount.api.BillingAccountUser;
+import com.appirio.service.billingaccount.api.ChallengeFee;
+import com.appirio.service.billingaccount.api.ChallengeFeePercentage;
+import com.appirio.service.billingaccount.api.ChallengeType;
 import com.appirio.service.billingaccount.api.IdDTO;
 import com.appirio.service.billingaccount.dao.BillingAccountDAO;
 import com.appirio.service.billingaccount.dto.TCUserDTO;
 import com.appirio.supply.SupplyException;
 import com.appirio.supply.dataaccess.QueryResult;
 import com.appirio.supply.dataaccess.db.IdGenerator;
+import com.appirio.tech.core.api.v3.request.FieldSelector;
+import com.appirio.tech.core.api.v3.request.FilterParameter;
 import com.appirio.tech.core.api.v3.request.QueryParameter;
 import com.appirio.tech.core.auth.AuthUser;
 
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,12 +45,25 @@ import java.util.List;
  *  -- Updated createBillingAccount() and updateBillingAccount() to associate billing account to client
  *  -- Updated getBillingAccountUsers() to support limit and offset
  * </p>
- *
- * @author TCSCODER, TCSCODER
- * @version 1.2
+ * 
+ * <p>
+ *  Changes in v 1.3 Topcoder - Create Challenge Fee Management APIs For Billing Accounts v1.0
+ *  -- add methods to create/update/get challenge fee and challenge fee percentage for project
+ * </p>
+ * 
+ * @author TCSCODER
+ * @version 1.3
  */
 public class BillingAccountManager extends BaseManager {
+    /**
+     * The CHALLENGE_TYPE_CACHE_KEY used to cache the challenge type list
+     */
+    private static String CHALLENGE_TYPE_CACHE_KEY = "CHALLENGE_TYPE_CACHE_KEY";
 
+    /**
+     * The CHALLENGE_TYPE_CACHE_EXPIRED_TIME
+     */
+    private static int CHALLENGE_TYPE_CACHE_EXPIRED_TIME = 600;
     /**
      * DAO for the billing accounts
      */
@@ -57,22 +78,40 @@ public class BillingAccountManager extends BaseManager {
      * The Id Generator to be used to generate user account ids.
      */
     private IdGenerator userAccountIdGenerator;
+    
+    /**
+     * The challengeFeeIdGenerator to generate the id
+     */
+    private IdGenerator challengeFeeIdGenerator;
+    
+    /**
+     * The challengeFeePercentageIdGenerator to generate the id
+     */
+    private IdGenerator challengeFeePercentageIdGenerator;
+    
+    /**
+     * The cacheService to cache the data
+     */
+    private SimpleCacheService cacheService = new SimpleCacheService();
 
     /**
-     * Constructor for billing account manager
+     * Create BillingAccountManager
      *
-     * @param billingAccountDAO
-     *            The billing account DAO.
-     * @param billingAccountIdGenerator
-     *            The billing account id generator.
-     * @param userAccountIdGenerator
-     *            The user account id generator.
+     * @param billingAccountDAO the billingAccountDAO to use
+     * @param billingAccountIdGenerator the billingAccountIdGenerator to use
+     * @param userAccountIdGenerator the userAccountIdGenerator to use
+     * @param challengeFeeIdGenerator the challengeFeeIdGenerator to use
+     * @param challengeFeePercentageIdGenerator the challengeFeePercentageIdGenerator to use
      */
     public BillingAccountManager(BillingAccountDAO billingAccountDAO, IdGenerator billingAccountIdGenerator,
-            IdGenerator userAccountIdGenerator) {
+            IdGenerator userAccountIdGenerator,
+            IdGenerator challengeFeeIdGenerator, IdGenerator challengeFeePercentageIdGenerator) {
         this.billingAccountDAO = billingAccountDAO;
         this.billingAccountIdGenerator = billingAccountIdGenerator;
         this.userAccountIdGenerator = userAccountIdGenerator;
+        
+        this.challengeFeeIdGenerator = challengeFeeIdGenerator;
+        this.challengeFeePercentageIdGenerator = challengeFeePercentageIdGenerator;
     }
 
     /**
@@ -271,6 +310,243 @@ public class BillingAccountManager extends BaseManager {
     }
 
     /**
+     * Create billing account fees
+     *
+     * @param user the user to use
+     * @param billingAccountFees the billingAccountFees to use
+     * @param projectId the projectId to use
+     * @throws SupplyException if any error occurs
+     * @return the BillingAccountFees result
+     */
+    public BillingAccountFees createBillingAccountFees(AuthUser user, BillingAccountFees billingAccountFees, long projectId) throws SupplyException {
+        if (projectId <= 0) {
+            throw new SupplyException("The billing account id must be positive", 400);
+        }
+        if (billingAccountFees.getChallengeFees() == null || billingAccountFees.getChallengeFees().size() == 0) {
+            throw new SupplyException("The challenge fee data should be provided", 400);
+        }
+        long userId = Long.parseLong(user.getUserId().getId());
+        try {
+            IdDTO idDto = this.billingAccountDAO.checkBillingAccountExists(projectId);
+            if (idDto == null || idDto.getId() <= 0) {
+                throw new SupplyException("The billing account does not exist with the id:" + projectId, 404);
+            }
+            
+            idDto = this.billingAccountDAO.checkChallengeFeeExists(projectId);
+            if (idDto.getId() > 0) {
+                throw new SupplyException("The challenge fee was created for the billing account", 400);
+            }
+            List<ChallengeType> types = this.getChallengeTypes();
+            for (ChallengeFee fee : billingAccountFees.getChallengeFees()) {
+                long id = this.challengeFeeIdGenerator.getNextId();
+                fee.setId(id);
+                fee.setProjectId(projectId);
+                Date date = new Date();
+                fee.setCreatedAt(date);
+                fee.setUpdatedAt(date);
+                fee.setCreatedBy(user.getUserId().getId());
+                fee.setUpdatedBy(user.getUserId().getId());
+                for (ChallengeType type : types) {
+                    if (type.getChallengeTypeId() == fee.getChallengeTypeId()) {
+                        fee.setStudio(type.isStudio());
+                        fee.setChallengeTypeDescription(type.getDescription());
+                    }
+                }
+                this.billingAccountDAO.createChallengeFee(id, fee.getProjectId(), fee.isStudio() ? 1 : 0, 
+                        fee.getChallengeTypeId(), fee.getChallengeFee(), userId, fee.getName(), fee.isDeleted());
+            }
+            
+            this.processChallengeFeePercentage(userId, projectId, billingAccountFees.isChallengeFeeFixed(), 
+                    billingAccountFees.getChallengeFeePercentage());
+        } catch (SupplyException se) { 
+            throw se;
+        } catch (Exception exp) {
+            SupplyException se = new SupplyException("Internal server error", exp);
+            se.setStatusCode(500);
+            throw se;
+        }
+        return billingAccountFees;
+    }
+    
+    /**
+     * Update billing account fees
+     *
+     * @param user the user to use
+     * @param billingAccountFees the billingAccountFees to use
+     * @param projectId the projectId to use
+     * @throws SupplyException if any error occurs
+     * @return the BillingAccountFees result
+     */
+    public BillingAccountFees updateBillingAccountFees(AuthUser user, BillingAccountFees billingAccountFees, long projectId) throws SupplyException {
+        if (projectId <= 0) {
+            throw new SupplyException("The billing account id must be positive", 400);
+        }
+        if (billingAccountFees.getChallengeFees() == null || billingAccountFees.getChallengeFees().size() == 0) {
+            throw new SupplyException("The challenge fee data should be provided", 400);
+        }
+        long userId = Long.parseLong(user.getUserId().getId());
+        try {
+            BillingAccountFees exists = this.getBillingAccountFees(user, projectId);
+            List<ChallengeFee> temp = exists.getChallengeFees();
+           
+            List<ChallengeFee> feesToUpdate = new ArrayList<ChallengeFee>();
+            for (ChallengeFee fee : billingAccountFees.getChallengeFees()) {
+                if (fee.getId() > 0) {
+                    ChallengeFee hit = null;
+                    for (ChallengeFee tp : temp) {
+                        if (fee.getId() == tp.getId()) {
+                            hit = tp;
+                            break;
+                        }
+                    }
+                    if (hit == null) {
+                        throw new SupplyException("The challenge fee does not exists for the project(" + projectId + ") with the id:" + fee.getId(), 404);
+                    } else {
+                        feesToUpdate.add(hit);
+                    }
+                }
+            }
+
+            List<ChallengeFee> toDelete = new ArrayList<ChallengeFee>(temp);
+            toDelete.removeAll(feesToUpdate);
+            if (toDelete.size() > 0) {
+                StringBuilder sb = new StringBuilder();
+                for (ChallengeFee fee : toDelete) {
+                    sb.append(fee.getId() + ",");
+                }
+                FilterParameter filter = new FilterParameter("projectContestFeeIds=in(" + sb.substring(0, sb.length() - 1) + ")");
+                QueryParameter queryParameter = new QueryParameter(new FieldSelector());
+                queryParameter.setFilter(filter);
+                
+                this.billingAccountDAO.deleteChallengeFee(queryParameter);
+            }
+            
+            
+            List<ChallengeType> types = this.getChallengeTypes();
+            for (ChallengeFee fee : billingAccountFees.getChallengeFees()) {
+                for (ChallengeType type : types) {
+                    if (type.getChallengeTypeId() == fee.getChallengeTypeId()) {
+                        fee.setStudio(type.isStudio());
+                        fee.setChallengeTypeDescription(type.getDescription());
+                    }
+                }
+                fee.setProjectId(projectId);
+                Date date = new Date();
+                fee.setUpdatedAt(date);
+                fee.setUpdatedBy(user.getUserId().getId());
+                if (fee.getId() <= 0) {
+                    long id = this.challengeFeeIdGenerator.getNextId();
+                    fee.setId(id);
+                    fee.setCreatedBy(user.getUserId().getId());
+                    fee.setUpdatedBy(user.getUserId().getId());
+                    this.billingAccountDAO.createChallengeFee(id, fee.getProjectId(), fee.isStudio() ? 1 : 0, 
+                            fee.getChallengeTypeId(), fee.getChallengeFee(), userId, fee.getName(), fee.isDeleted());
+                } else {
+                    
+                    this.billingAccountDAO.updateChallengeFee(fee.getId(), fee.getProjectId(), fee.isStudio() ? 1 : 0, 
+                            fee.getChallengeTypeId(), fee.getChallengeFee(), userId, fee.getName(), fee.isDeleted());
+                }
+            }
+            
+            this.processChallengeFeePercentage(userId, projectId, billingAccountFees.isChallengeFeeFixed(), 
+                    billingAccountFees.getChallengeFeePercentage());
+        } catch (SupplyException se) { 
+            throw se;
+        } catch (Exception exp) {
+            SupplyException se = new SupplyException("Internal server error", exp);
+            se.setStatusCode(500);
+            throw se;
+        }
+        return billingAccountFees;
+    }
+    
+    /**
+     * Get billing account fees
+     *
+     * @param user the user to use
+     * @param projectId the projectId to use
+     * @throws SupplyException if any error occurs
+     * @return the BillingAccountFees result
+     */
+    public BillingAccountFees getBillingAccountFees(AuthUser user, long projectId) throws SupplyException {
+        if (projectId <= 0) {
+            throw new SupplyException("The billing account id must be positive", 400);
+        }
+        try {
+            IdDTO idDto = this.billingAccountDAO.checkBillingAccountExists(projectId);
+            if (idDto == null || idDto.getId() <= 0) {
+                throw new SupplyException("The billing account does not exist with the id:" + projectId, 404);
+            }
+            
+            BillingAccountFees bf = new BillingAccountFees();
+            List<ChallengeFee> fees = this.billingAccountDAO.getChallengeFee(projectId);
+            if (fees == null || fees.size() == 0) {
+                throw new SupplyException("The challenge fee was not created for the billing account", 404);
+            }
+            bf.setChallengeFees(fees);
+            List<ChallengeType> types = this.getChallengeTypes();
+            for (ChallengeFee fee : fees) { 
+                for (ChallengeType type : types) { 
+                    if (type.getChallengeTypeId() == fee.getChallengeTypeId()) {
+                        fee.setChallengeTypeDescription(type.getDescription());
+                    }
+                }
+            }
+            
+            ChallengeFeePercentage percentage = this.billingAccountDAO.getChallengeFeePercentage(projectId);
+            bf.setChallengeFeePercentage(percentage.getChallengeFeePercentage());
+            if (percentage.isActive()) {
+                bf.setChallengeFeePercentage(percentage.getChallengeFeePercentage());
+            } else {
+                bf.setChallengeFeePercentage(0);
+            }
+            bf.setChallengeFeeFixed(!percentage.isActive());
+            return bf;
+        } catch (SupplyException se) { 
+            throw se;
+        } catch (Exception exp) {
+            SupplyException se = new SupplyException("Internal server error", exp);
+            se.setStatusCode(500);
+            throw se;
+        }
+    }
+    
+    /**
+     * Process challenge fee percentage
+     *
+     * @param userId the userId to use
+     * @param projectId the projectId to use
+     * @param challengeFeeFixed the challengeFeeFixed to use
+     * @param challengeFeePercentage the challengeFeePercentage to use
+     */
+    private void processChallengeFeePercentage(long userId, long projectId, boolean challengeFeeFixed, 
+            double challengeFeePercentage) throws SupplyException {
+        ChallengeFeePercentage percentage = this.billingAccountDAO.getChallengeFeePercentage(projectId);
+        boolean exist = (percentage != null); 
+        if (!exist) {        
+            // create the percentage
+            percentage = new ChallengeFeePercentage();
+            percentage.setId(this.challengeFeePercentageIdGenerator.getNextId());
+            percentage.setProjectId(projectId);        
+        }
+        percentage.setActive(!challengeFeeFixed);
+        if (percentage.isActive()) {
+            percentage.setChallengeFeePercentage(challengeFeePercentage);
+        } else {
+            percentage.setChallengeFeePercentage(0);
+        }
+
+        // create or update the percentage
+        if (exist) {
+            this.billingAccountDAO.updateChallengeFeePercentage(percentage.getId(), percentage.getProjectId(), 
+                    percentage.getChallengeFeePercentage(), percentage.isActive(), userId);
+        } else {
+            this.billingAccountDAO.createChallengeFeePercentage(percentage.getId(), percentage.getProjectId(), 
+                    percentage.getChallengeFeePercentage(), percentage.isActive(), userId);
+        }
+    }
+    
+    /**
      * Checks whether company identified by the given id exists in the persistence.
      *
      * @param companyId
@@ -296,5 +572,21 @@ public class BillingAccountManager extends BaseManager {
             throw new IllegalArgumentException(String.format(
                     "The client identified by id = %s, " + "does not exist.", clientId));
         }
+    }
+    
+    /**
+     * Get challenge types
+     *
+     * @return the List<ChallengeType> result
+     */
+    private List<ChallengeType> getChallengeTypes() {
+        List<ChallengeType> types = (List<ChallengeType>) this.cacheService.get(CHALLENGE_TYPE_CACHE_KEY);
+        if (types == null) {
+            types = this.billingAccountDAO.getProjectCategoriesReplatforming();
+            // cache for ten minutes
+            this.cacheService.put(CHALLENGE_TYPE_CACHE_KEY, types, CHALLENGE_TYPE_CACHE_EXPIRED_TIME);
+        }
+        
+        return types;
     }
 }

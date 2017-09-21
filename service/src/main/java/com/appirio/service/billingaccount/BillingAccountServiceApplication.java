@@ -30,9 +30,14 @@ import java.util.List;
  *   -- Updated registerResources() to register the ClientResource.
  *  </li>
  * </p>
+ * 
+ * <p>
+ *  Changes in v 1.2 Topcoder - Create Challenge Fee Management APIs For Billing Accounts v1.0
+ *  -- modified registerResources to create the BillingAccountManager with id generators for challenge fee and percentage.
+ * </p>
  *
- * @author TCSCODER, TCSCODER
- * @version 1.1
+ * @author TCSCODER
+ * @version 1.2
  */
 public class BillingAccountServiceApplication extends BaseApplication<BillingAccountServiceConfiguration> {
 
@@ -82,7 +87,9 @@ public class BillingAccountServiceApplication extends BaseApplication<BillingAcc
     	BillingAccountManager billingAccountManager = 
         		new BillingAccountManager(DAOFactory.getInstance().createDAO(BillingAccountDAO.class),
         				IdGenerator.getInstance("com.topcoder.timetracker.ProjectManager"),
-        				IdGenerator.getInstance("com.topcoder.timetracker.user.User"));
+        				IdGenerator.getInstance("com.topcoder.timetracker.user.User"),
+        				IdGenerator.getInstance("project_contest_fee_seq"),
+        				IdGenerator.getInstance("project_contest_fee_percentage_seq"));
 
     	// initialize the client manager
         ClientManager clientManager = new ClientManager(DAOFactory.getInstance().createDAO(ClientDAO.class),

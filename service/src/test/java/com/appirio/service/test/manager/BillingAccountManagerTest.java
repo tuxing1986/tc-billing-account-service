@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 public class BillingAccountManagerTest extends GenericDAOTest {
     private BillingAccountDAO billingAccountDAO = mock(BillingAccountDAO.class);
     private IdGenerator generator = mock(IdGenerator.class);
-    private BillingAccountManager unit = new BillingAccountManager(billingAccountDAO, generator, generator);
+    private BillingAccountManager unit = new BillingAccountManager(billingAccountDAO, generator, generator, null, null);
 
     @Test
     public void testSearchBillingAccounts() {
